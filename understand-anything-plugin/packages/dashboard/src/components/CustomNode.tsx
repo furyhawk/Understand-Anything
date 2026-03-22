@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Handle, Position } from "@xyflow/react";
 import type { NodeProps, Node } from "@xyflow/react";
 
@@ -40,7 +41,7 @@ export interface CustomNodeData extends Record<string, unknown> {
 
 export type CustomFlowNode = Node<CustomNodeData, "custom">;
 
-export default function CustomNode({
+function CustomNodeComponent({
   id,
   data,
 }: NodeProps<CustomFlowNode>) {
@@ -122,3 +123,6 @@ export default function CustomNode({
     </div>
   );
 }
+
+const CustomNode = memo(CustomNodeComponent);
+export default CustomNode;
