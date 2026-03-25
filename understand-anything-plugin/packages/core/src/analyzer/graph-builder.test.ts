@@ -74,14 +74,14 @@ describe("GraphBuilder", () => {
     expect(fileNode!.type).toBe("file");
     expect(fileNode!.summary).toBe("Handles data processing");
 
-    const funcNode = graph.nodes.find((n) => n.id === "func:src/service.ts:processData");
+    const funcNode = graph.nodes.find((n) => n.id === "function:src/service.ts:processData");
     expect(funcNode).toBeDefined();
     expect(funcNode!.type).toBe("function");
     expect(funcNode!.name).toBe("processData");
     expect(funcNode!.lineRange).toEqual([10, 25]);
     expect(funcNode!.summary).toBe("Processes raw input data");
 
-    const validateNode = graph.nodes.find((n) => n.id === "func:src/service.ts:validate");
+    const validateNode = graph.nodes.find((n) => n.id === "function:src/service.ts:validate");
     expect(validateNode).toBeDefined();
     expect(validateNode!.summary).toBe("Validates data format");
 
@@ -120,7 +120,7 @@ describe("GraphBuilder", () => {
 
     expect(containsEdges[0]).toMatchObject({
       source: "file:src/widget.ts",
-      target: "func:src/widget.ts:helper",
+      target: "function:src/widget.ts:helper",
       type: "contains",
       direction: "forward",
       weight: 1,
@@ -170,8 +170,8 @@ describe("GraphBuilder", () => {
     const callEdges = graph.edges.filter((e) => e.type === "calls");
     expect(callEdges).toHaveLength(1);
     expect(callEdges[0]).toMatchObject({
-      source: "func:src/index.ts:main",
-      target: "func:src/utils.ts:helper",
+      source: "function:src/index.ts:main",
+      target: "function:src/utils.ts:helper",
       type: "calls",
       direction: "forward",
     });

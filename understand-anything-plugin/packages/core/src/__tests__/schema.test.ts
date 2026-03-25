@@ -1,5 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { validateGraph } from "../schema.js";
+import {
+  validateGraph,
+  normalizeGraph,
+  NODE_TYPE_ALIASES,
+  EDGE_TYPE_ALIASES,
+} from "../schema.js";
 import type { KnowledgeGraph } from "../types.js";
 
 const validGraph: KnowledgeGraph = {
@@ -108,5 +113,153 @@ describe("schema validation", () => {
     const result = validateGraph(graph);
     expect(result.success).toBe(false);
     expect(result.errors).toBeDefined();
+  });
+
+  it('normalizes "func" node type to "function"', () => {
+    const graph = structuredClone(validGraph);
+    (graph.nodes[0] as any).type = "func";
+
+    const result = validateGraph(graph);
+    expect(result.success).toBe(true);
+    expect(result.data!.nodes[0].type).toBe("function");
+  });
+
+  it('normalizes "fn" node type to "function"', () => {
+    const graph = structuredClone(validGraph);
+    (graph.nodes[0] as any).type = "fn";
+
+    const result = validateGraph(graph);
+    expect(result.success).toBe(true);
+    expect(result.data!.nodes[0].type).toBe("function");
+  });
+
+  it('normalizes "method" node type to "function"', () => {
+    const graph = structuredClone(validGraph);
+    (graph.nodes[0] as any).type = "method";
+
+    const result = validateGraph(graph);
+    expect(result.success).toBe(true);
+    expect(result.data!.nodes[0].type).toBe("function");
+  });
+
+  it('normalizes "interface" node type to "class"', () => {
+    const graph = structuredClone(validGraph);
+    (graph.nodes[0] as any).type = "interface";
+
+    const result = validateGraph(graph);
+    expect(result.success).toBe(true);
+    expect(result.data!.nodes[0].type).toBe("class");
+  });
+
+  it('normalizes "struct" node type to "class"', () => {
+    const graph = structuredClone(validGraph);
+    (graph.nodes[0] as any).type = "struct";
+
+    const result = validateGraph(graph);
+    expect(result.success).toBe(true);
+    expect(result.data!.nodes[0].type).toBe("class");
+  });
+
+  it("normalizes multiple aliased node types in one graph", () => {
+    const graph = structuredClone(validGraph);
+    (graph.nodes[0] as any).type = "func";
+    graph.nodes.push({
+      id: "node-2",
+      type: "file" as any,
+      name: "utils.ts",
+      filePath: "src/utils.ts",
+      lineRange: [1, 30],
+      summary: "Utility helpers",
+      tags: ["utils"],
+      complexity: "simple",
+    });
+    (graph.nodes[1] as any).type = "pkg";
+    graph.nodes.push({
+      id: "node-3",
+      type: "file" as any,
+      name: "MyClass.ts",
+      filePath: "src/MyClass.ts",
+      lineRange: [1, 80],
+      summary: "A class",
+      tags: ["class"],
+      complexity: "moderate",
+    });
+    (graph.nodes[2] as any).type = "struct";
+
+    const result = validateGraph(graph);
+    expect(result.success).toBe(true);
+    expect(result.data!.nodes[0].type).toBe("function");
+    expect(result.data!.nodes[1].type).toBe("module");
+    expect(result.data!.nodes[2].type).toBe("class");
+  });
+
+  it('normalizes "extends" edge type to "inherits"', () => {
+    const graph = structuredClone(validGraph);
+    (graph.edges[0] as any).type = "extends";
+
+    const result = validateGraph(graph);
+    expect(result.success).toBe(true);
+    expect(result.data!.edges[0].type).toBe("inherits");
+  });
+
+  it('normalizes "invokes" edge type to "calls"', () => {
+    const graph = structuredClone(validGraph);
+    (graph.edges[0] as any).type = "invokes";
+
+    const result = validateGraph(graph);
+    expect(result.success).toBe(true);
+    expect(result.data!.edges[0].type).toBe("calls");
+  });
+
+  it('normalizes "relates_to" edge type to "related"', () => {
+    const graph = structuredClone(validGraph);
+    (graph.edges[0] as any).type = "relates_to";
+
+    const result = validateGraph(graph);
+    expect(result.success).toBe(true);
+    expect(result.data!.edges[0].type).toBe("related");
+  });
+
+  it('normalizes "uses" edge type to "depends_on"', () => {
+    const graph = structuredClone(validGraph);
+    (graph.edges[0] as any).type = "uses";
+
+    const result = validateGraph(graph);
+    expect(result.success).toBe(true);
+    expect(result.data!.edges[0].type).toBe("depends_on");
+  });
+
+  it('rejects "tests" edge type — direction-inverting alias is unsafe', () => {
+    const graph = structuredClone(validGraph);
+    (graph.edges[0] as any).type = "tests";
+
+    const result = validateGraph(graph);
+    expect(result.success).toBe(false);
+  });
+
+  it("still rejects truly invalid edge types after normalization", () => {
+    const graph = structuredClone(validGraph);
+    (graph.edges[0] as any).type = "totally_bogus";
+
+    const result = validateGraph(graph);
+    expect(result.success).toBe(false);
+  });
+
+  it("NODE_TYPE_ALIASES values are never alias keys (no chains)", () => {
+    for (const [alias, target] of Object.entries(NODE_TYPE_ALIASES)) {
+      expect(
+        NODE_TYPE_ALIASES,
+        `chain detected: ${alias} → ${target} → ${NODE_TYPE_ALIASES[target]}`,
+      ).not.toHaveProperty(target);
+    }
+  });
+
+  it("EDGE_TYPE_ALIASES values are never alias keys (no chains)", () => {
+    for (const [alias, target] of Object.entries(EDGE_TYPE_ALIASES)) {
+      expect(
+        EDGE_TYPE_ALIASES,
+        `chain detected: ${alias} → ${target} → ${EDGE_TYPE_ALIASES[target]}`,
+      ).not.toHaveProperty(target);
+    }
   });
 });

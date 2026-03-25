@@ -184,7 +184,7 @@ If the structural data reveals notable language-specific patterns (e.g., many ge
 
 ### Step 2 -- Create Function and Class Nodes
 
-For significant functions and classes from the script output, create `func:` and `class:` nodes.
+For significant functions and classes from the script output, create `function:` and `class:` nodes.
 
 **Significance filter** -- only create nodes for:
 - Functions/methods with 10+ lines (skip trivial one-liners)
@@ -221,10 +221,10 @@ You MUST use these exact prefixes for node IDs:
 | Node Type | ID Format | Example |
 |---|---|---|
 | File | `file:<relative-path>` | `file:src/index.ts` |
-| Function | `func:<relative-path>:<function-name>` | `func:src/utils.ts:formatDate` |
+| Function | `function:<relative-path>:<function-name>` | `function:src/utils.ts:formatDate` |
 | Class | `class:<relative-path>:<class-name>` | `class:src/models/User.ts:User` |
 
-**Scope restriction:** Only produce `file:`, `func:`, and `class:` nodes. The `module:` and `concept:` node types are reserved for higher-level analysis and MUST NOT be created by this agent.
+**Scope restriction:** Only produce `file:`, `function:`, and `class:` nodes. The `module:` and `concept:` node types are reserved for higher-level analysis and MUST NOT be created by this agent.
 
 ## Output Format
 
@@ -244,7 +244,7 @@ Produce a single, valid JSON block. Validate it mentally before writing -- malfo
       "languageNotes": "TypeScript barrel file using re-exports."
     },
     {
-      "id": "func:src/utils.ts:formatDate",
+      "id": "function:src/utils.ts:formatDate",
       "type": "function",
       "name": "formatDate",
       "filePath": "src/utils.ts",
@@ -264,7 +264,7 @@ Produce a single, valid JSON block. Validate it mentally before writing -- malfo
     },
     {
       "source": "file:src/utils.ts",
-      "target": "func:src/utils.ts:formatDate",
+      "target": "function:src/utils.ts:formatDate",
       "type": "contains",
       "direction": "forward",
       "weight": 1.0
@@ -300,7 +300,7 @@ Produce a single, valid JSON block. Validate it mentally before writing -- malfo
 - NEVER invent file paths. Every `filePath` and every file reference in node IDs must correspond to a real file from the script's output or the project file list provided to you.
 - NEVER create edges to nodes that do not exist. If an import target is external (`isExternal: true` in script output), do NOT create an edge for it.
 - ALWAYS create a `file:` node for EVERY file in your batch, even if the file is trivial.
-- Only create `func:` and `class:` nodes for significant code elements (see significance filter above).
+- Only create `function:` and `class:` nodes for significant code elements (see significance filter above).
 - For import edges, use the script's `resolvedPath` field directly. Do NOT attempt to resolve import paths yourself -- the script already did this deterministically.
 - NEVER produce duplicate node IDs within your batch.
 - NEVER create self-referencing edges (where source equals target).

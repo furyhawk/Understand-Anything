@@ -9,6 +9,35 @@ export const EdgeTypeSchema = z.enum([
   "related", "similar_to",                                      // Semantic
 ]);
 
+// Aliases that LLMs commonly generate instead of canonical node types
+export const NODE_TYPE_ALIASES: Record<string, string> = {
+  func: "function",
+  fn: "function",
+  method: "function",
+  interface: "class",
+  struct: "class",
+  mod: "module",
+  pkg: "module",
+  package: "module",
+};
+
+// Aliases that LLMs commonly generate instead of canonical edge types
+export const EDGE_TYPE_ALIASES: Record<string, string> = {
+  extends: "inherits",
+  invokes: "calls",
+  invoke: "calls",
+  uses: "depends_on",
+  requires: "depends_on",
+  relates_to: "related",
+  related_to: "related",
+  similar: "similar_to",
+  import: "imports",
+  export: "exports",
+  contain: "contains",
+  publish: "publishes",
+  subscribe: "subscribes",
+};
+
 export const GraphNodeSchema = z.object({
   id: z.string(),
   type: z.enum(["file", "function", "class", "module", "concept"]),
@@ -69,8 +98,45 @@ export interface ValidationResult {
   errors?: string[];
 }
 
+export function normalizeGraph(data: unknown): unknown {
+  if (typeof data !== "object" || data === null) return data;
+
+  const d = data as Record<string, unknown>;
+  const result = { ...d };
+
+  if (Array.isArray(d.nodes)) {
+    result.nodes = (d.nodes as any[]).map((node) => {
+      if (
+        typeof node === "object" &&
+        node !== null &&
+        typeof node.type === "string" &&
+        node.type in NODE_TYPE_ALIASES
+      ) {
+        return { ...node, type: NODE_TYPE_ALIASES[node.type] };
+      }
+      return node;
+    });
+  }
+
+  if (Array.isArray(d.edges)) {
+    result.edges = (d.edges as any[]).map((edge) => {
+      if (
+        typeof edge === "object" &&
+        edge !== null &&
+        typeof edge.type === "string" &&
+        edge.type in EDGE_TYPE_ALIASES
+      ) {
+        return { ...edge, type: EDGE_TYPE_ALIASES[edge.type] };
+      }
+      return edge;
+    });
+  }
+
+  return result;
+}
+
 export function validateGraph(data: unknown): ValidationResult {
-  const result = KnowledgeGraphSchema.safeParse(data);
+  const result = KnowledgeGraphSchema.safeParse(normalizeGraph(data));
 
   if (result.success) {
     return { success: true, data: result.data };

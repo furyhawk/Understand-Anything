@@ -112,7 +112,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/core/src/schema.ts:validateGraph",
+      "id": "function:packages/core/src/schema.ts:validateGraph",
       "type": "function",
       "name": "validateGraph",
       "filePath": "packages/core/src/schema.ts",
@@ -164,7 +164,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/core/src/embedding-search.ts:cosineSimilarity",
+      "id": "function:packages/core/src/embedding-search.ts:cosineSimilarity",
       "type": "function",
       "name": "cosineSimilarity",
       "filePath": "packages/core/src/embedding-search.ts",
@@ -181,7 +181,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/core/src/staleness.ts:getChangedFiles",
+      "id": "function:packages/core/src/staleness.ts:getChangedFiles",
       "type": "function",
       "name": "getChangedFiles",
       "filePath": "packages/core/src/staleness.ts",
@@ -198,7 +198,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/core/src/staleness.ts:isStale",
+      "id": "function:packages/core/src/staleness.ts:isStale",
       "type": "function",
       "name": "isStale",
       "filePath": "packages/core/src/staleness.ts",
@@ -215,7 +215,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/core/src/staleness.ts:mergeGraphUpdate",
+      "id": "function:packages/core/src/staleness.ts:mergeGraphUpdate",
       "type": "function",
       "name": "mergeGraphUpdate",
       "filePath": "packages/core/src/staleness.ts",
@@ -263,7 +263,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/core/src/analyzer/graph-builder.ts:detectLanguage",
+      "id": "function:packages/core/src/analyzer/graph-builder.ts:detectLanguage",
       "type": "function",
       "name": "detectLanguage",
       "filePath": "packages/core/src/analyzer/graph-builder.ts",
@@ -293,7 +293,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/core/src/analyzer/llm-analyzer.ts:buildFileAnalysisPrompt",
+      "id": "function:packages/core/src/analyzer/llm-analyzer.ts:buildFileAnalysisPrompt",
       "type": "function",
       "name": "buildFileAnalysisPrompt",
       "filePath": "packages/core/src/analyzer/llm-analyzer.ts",
@@ -310,7 +310,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/core/src/analyzer/llm-analyzer.ts:buildProjectSummaryPrompt",
+      "id": "function:packages/core/src/analyzer/llm-analyzer.ts:buildProjectSummaryPrompt",
       "type": "function",
       "name": "buildProjectSummaryPrompt",
       "filePath": "packages/core/src/analyzer/llm-analyzer.ts",
@@ -327,7 +327,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/core/src/analyzer/llm-analyzer.ts:parseFileAnalysisResponse",
+      "id": "function:packages/core/src/analyzer/llm-analyzer.ts:parseFileAnalysisResponse",
       "type": "function",
       "name": "parseFileAnalysisResponse",
       "filePath": "packages/core/src/analyzer/llm-analyzer.ts",
@@ -344,7 +344,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/core/src/analyzer/llm-analyzer.ts:parseProjectSummaryResponse",
+      "id": "function:packages/core/src/analyzer/llm-analyzer.ts:parseProjectSummaryResponse",
       "type": "function",
       "name": "parseProjectSummaryResponse",
       "filePath": "packages/core/src/analyzer/llm-analyzer.ts",
@@ -375,7 +375,7 @@
       "complexity": "complex"
     },
     {
-      "id": "func:packages/core/src/analyzer/layer-detector.ts:detectLayers",
+      "id": "function:packages/core/src/analyzer/layer-detector.ts:detectLayers",
       "type": "function",
       "name": "detectLayers",
       "filePath": "packages/core/src/analyzer/layer-detector.ts",
@@ -392,7 +392,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/core/src/analyzer/layer-detector.ts:buildLayerDetectionPrompt",
+      "id": "function:packages/core/src/analyzer/layer-detector.ts:buildLayerDetectionPrompt",
       "type": "function",
       "name": "buildLayerDetectionPrompt",
       "filePath": "packages/core/src/analyzer/layer-detector.ts",
@@ -409,7 +409,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/core/src/analyzer/layer-detector.ts:parseLayerDetectionResponse",
+      "id": "function:packages/core/src/analyzer/layer-detector.ts:parseLayerDetectionResponse",
       "type": "function",
       "name": "parseLayerDetectionResponse",
       "filePath": "packages/core/src/analyzer/layer-detector.ts",
@@ -426,7 +426,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/core/src/analyzer/layer-detector.ts:applyLLMLayers",
+      "id": "function:packages/core/src/analyzer/layer-detector.ts:applyLLMLayers",
       "type": "function",
       "name": "applyLLMLayers",
       "filePath": "packages/core/src/analyzer/layer-detector.ts",
@@ -457,7 +457,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/core/src/analyzer/language-lesson.ts:detectLanguageConcepts",
+      "id": "function:packages/core/src/analyzer/language-lesson.ts:detectLanguageConcepts",
       "type": "function",
       "name": "detectLanguageConcepts",
       "filePath": "packages/core/src/analyzer/language-lesson.ts",
@@ -474,7 +474,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/core/src/analyzer/language-lesson.ts:buildLanguageLessonPrompt",
+      "id": "function:packages/core/src/analyzer/language-lesson.ts:buildLanguageLessonPrompt",
       "type": "function",
       "name": "buildLanguageLessonPrompt",
       "filePath": "packages/core/src/analyzer/language-lesson.ts",
@@ -491,7 +491,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/core/src/analyzer/language-lesson.ts:parseLanguageLessonResponse",
+      "id": "function:packages/core/src/analyzer/language-lesson.ts:parseLanguageLessonResponse",
       "type": "function",
       "name": "parseLanguageLessonResponse",
       "filePath": "packages/core/src/analyzer/language-lesson.ts",
@@ -523,7 +523,7 @@
       "complexity": "complex"
     },
     {
-      "id": "func:packages/core/src/analyzer/tour-generator.ts:buildTourGenerationPrompt",
+      "id": "function:packages/core/src/analyzer/tour-generator.ts:buildTourGenerationPrompt",
       "type": "function",
       "name": "buildTourGenerationPrompt",
       "filePath": "packages/core/src/analyzer/tour-generator.ts",
@@ -540,7 +540,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/core/src/analyzer/tour-generator.ts:parseTourGenerationResponse",
+      "id": "function:packages/core/src/analyzer/tour-generator.ts:parseTourGenerationResponse",
       "type": "function",
       "name": "parseTourGenerationResponse",
       "filePath": "packages/core/src/analyzer/tour-generator.ts",
@@ -557,7 +557,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/core/src/analyzer/tour-generator.ts:generateHeuristicTour",
+      "id": "function:packages/core/src/analyzer/tour-generator.ts:generateHeuristicTour",
       "type": "function",
       "name": "generateHeuristicTour",
       "filePath": "packages/core/src/analyzer/tour-generator.ts",
@@ -609,7 +609,7 @@
       "complexity": "complex"
     },
     {
-      "id": "func:packages/core/src/plugins/tree-sitter-plugin.ts:languageKeyFromPath",
+      "id": "function:packages/core/src/plugins/tree-sitter-plugin.ts:languageKeyFromPath",
       "type": "function",
       "name": "languageKeyFromPath",
       "filePath": "packages/core/src/plugins/tree-sitter-plugin.ts",
@@ -625,7 +625,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/core/src/plugins/tree-sitter-plugin.ts:traverse",
+      "id": "function:packages/core/src/plugins/tree-sitter-plugin.ts:traverse",
       "type": "function",
       "name": "traverse",
       "filePath": "packages/core/src/plugins/tree-sitter-plugin.ts",
@@ -642,7 +642,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/core/src/plugins/tree-sitter-plugin.ts:getStringValue",
+      "id": "function:packages/core/src/plugins/tree-sitter-plugin.ts:getStringValue",
       "type": "function",
       "name": "getStringValue",
       "filePath": "packages/core/src/plugins/tree-sitter-plugin.ts",
@@ -659,7 +659,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/core/src/plugins/tree-sitter-plugin.ts:extractParams",
+      "id": "function:packages/core/src/plugins/tree-sitter-plugin.ts:extractParams",
       "type": "function",
       "name": "extractParams",
       "filePath": "packages/core/src/plugins/tree-sitter-plugin.ts",
@@ -677,7 +677,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/core/src/plugins/tree-sitter-plugin.ts:extractReturnType",
+      "id": "function:packages/core/src/plugins/tree-sitter-plugin.ts:extractReturnType",
       "type": "function",
       "name": "extractReturnType",
       "filePath": "packages/core/src/plugins/tree-sitter-plugin.ts",
@@ -695,7 +695,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/core/src/plugins/tree-sitter-plugin.ts:extractImportSpecifiers",
+      "id": "function:packages/core/src/plugins/tree-sitter-plugin.ts:extractImportSpecifiers",
       "type": "function",
       "name": "extractImportSpecifiers",
       "filePath": "packages/core/src/plugins/tree-sitter-plugin.ts",
@@ -758,7 +758,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/core/src/plugins/discovery.ts:parsePluginConfig",
+      "id": "function:packages/core/src/plugins/discovery.ts:parsePluginConfig",
       "type": "function",
       "name": "parsePluginConfig",
       "filePath": "packages/core/src/plugins/discovery.ts",
@@ -775,7 +775,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/core/src/plugins/discovery.ts:serializePluginConfig",
+      "id": "function:packages/core/src/plugins/discovery.ts:serializePluginConfig",
       "type": "function",
       "name": "serializePluginConfig",
       "filePath": "packages/core/src/plugins/discovery.ts",
@@ -805,7 +805,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/core/src/persistence/index.ts:saveGraph",
+      "id": "function:packages/core/src/persistence/index.ts:saveGraph",
       "type": "function",
       "name": "saveGraph",
       "filePath": "packages/core/src/persistence/index.ts",
@@ -822,7 +822,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/core/src/persistence/index.ts:loadGraph",
+      "id": "function:packages/core/src/persistence/index.ts:loadGraph",
       "type": "function",
       "name": "loadGraph",
       "filePath": "packages/core/src/persistence/index.ts",
@@ -840,7 +840,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/core/src/persistence/index.ts:saveMeta",
+      "id": "function:packages/core/src/persistence/index.ts:saveMeta",
       "type": "function",
       "name": "saveMeta",
       "filePath": "packages/core/src/persistence/index.ts",
@@ -857,7 +857,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/core/src/persistence/index.ts:loadMeta",
+      "id": "function:packages/core/src/persistence/index.ts:loadMeta",
       "type": "function",
       "name": "loadMeta",
       "filePath": "packages/core/src/persistence/index.ts",
@@ -889,7 +889,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/dashboard/src/App.tsx:App",
+      "id": "function:packages/dashboard/src/App.tsx:App",
       "type": "function",
       "name": "App",
       "filePath": "packages/dashboard/src/App.tsx",
@@ -934,7 +934,7 @@
       "complexity": "complex"
     },
     {
-      "id": "func:packages/dashboard/src/store.ts:buildSystemPrompt",
+      "id": "function:packages/dashboard/src/store.ts:buildSystemPrompt",
       "type": "function",
       "name": "buildSystemPrompt",
       "filePath": "packages/dashboard/src/store.ts",
@@ -951,7 +951,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/dashboard/src/store.ts:getSortedTour",
+      "id": "function:packages/dashboard/src/store.ts:getSortedTour",
       "type": "function",
       "name": "getSortedTour",
       "filePath": "packages/dashboard/src/store.ts",
@@ -967,7 +967,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/dashboard/src/store.ts:useDashboardStore",
+      "id": "function:packages/dashboard/src/store.ts:useDashboardStore",
       "type": "function",
       "name": "useDashboardStore",
       "filePath": "packages/dashboard/src/store.ts",
@@ -999,7 +999,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/dashboard/src/utils/layout.ts:applyDagreLayout",
+      "id": "function:packages/dashboard/src/utils/layout.ts:applyDagreLayout",
       "type": "function",
       "name": "applyDagreLayout",
       "filePath": "packages/dashboard/src/utils/layout.ts",
@@ -1031,7 +1031,7 @@
       "complexity": "complex"
     },
     {
-      "id": "func:packages/dashboard/src/components/GraphView.tsx:GraphView",
+      "id": "function:packages/dashboard/src/components/GraphView.tsx:GraphView",
       "type": "function",
       "name": "GraphView",
       "filePath": "packages/dashboard/src/components/GraphView.tsx",
@@ -1063,7 +1063,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/dashboard/src/components/ChatPanel.tsx:ChatPanel",
+      "id": "function:packages/dashboard/src/components/ChatPanel.tsx:ChatPanel",
       "type": "function",
       "name": "ChatPanel",
       "filePath": "packages/dashboard/src/components/ChatPanel.tsx",
@@ -1094,7 +1094,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/dashboard/src/components/CodeViewer.tsx:getLanguage",
+      "id": "function:packages/dashboard/src/components/CodeViewer.tsx:getLanguage",
       "type": "function",
       "name": "getLanguage",
       "filePath": "packages/dashboard/src/components/CodeViewer.tsx",
@@ -1111,7 +1111,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/dashboard/src/components/CodeViewer.tsx:CodeViewer",
+      "id": "function:packages/dashboard/src/components/CodeViewer.tsx:CodeViewer",
       "type": "function",
       "name": "CodeViewer",
       "filePath": "packages/dashboard/src/components/CodeViewer.tsx",
@@ -1161,7 +1161,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/dashboard/src/components/CustomNode.tsx:CustomNode",
+      "id": "function:packages/dashboard/src/components/CustomNode.tsx:CustomNode",
       "type": "function",
       "name": "CustomNode",
       "filePath": "packages/dashboard/src/components/CustomNode.tsx",
@@ -1193,7 +1193,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/dashboard/src/components/LayerLegend.tsx:getLayerColor",
+      "id": "function:packages/dashboard/src/components/LayerLegend.tsx:getLayerColor",
       "type": "function",
       "name": "getLayerColor",
       "filePath": "packages/dashboard/src/components/LayerLegend.tsx",
@@ -1210,7 +1210,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/dashboard/src/components/LayerLegend.tsx:getLayerBorderColor",
+      "id": "function:packages/dashboard/src/components/LayerLegend.tsx:getLayerBorderColor",
       "type": "function",
       "name": "getLayerBorderColor",
       "filePath": "packages/dashboard/src/components/LayerLegend.tsx",
@@ -1227,7 +1227,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/dashboard/src/components/LayerLegend.tsx:LayerLegend",
+      "id": "function:packages/dashboard/src/components/LayerLegend.tsx:LayerLegend",
       "type": "function",
       "name": "LayerLegend",
       "filePath": "packages/dashboard/src/components/LayerLegend.tsx",
@@ -1259,7 +1259,7 @@
       "complexity": "complex"
     },
     {
-      "id": "func:packages/dashboard/src/components/LearnPanel.tsx:LearnPanel",
+      "id": "function:packages/dashboard/src/components/LearnPanel.tsx:LearnPanel",
       "type": "function",
       "name": "LearnPanel",
       "filePath": "packages/dashboard/src/components/LearnPanel.tsx",
@@ -1291,7 +1291,7 @@
       "complexity": "complex"
     },
     {
-      "id": "func:packages/dashboard/src/components/NodeInfo.tsx:NodeInfo",
+      "id": "function:packages/dashboard/src/components/NodeInfo.tsx:NodeInfo",
       "type": "function",
       "name": "NodeInfo",
       "filePath": "packages/dashboard/src/components/NodeInfo.tsx",
@@ -1322,7 +1322,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/dashboard/src/components/PersonaSelector.tsx:PersonaSelector",
+      "id": "function:packages/dashboard/src/components/PersonaSelector.tsx:PersonaSelector",
       "type": "function",
       "name": "PersonaSelector",
       "filePath": "packages/dashboard/src/components/PersonaSelector.tsx",
@@ -1354,7 +1354,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/dashboard/src/components/SearchBar.tsx:SearchBar",
+      "id": "function:packages/dashboard/src/components/SearchBar.tsx:SearchBar",
       "type": "function",
       "name": "SearchBar",
       "filePath": "packages/dashboard/src/components/SearchBar.tsx",
@@ -1400,7 +1400,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/skill/src/context-builder.ts:buildChatContext",
+      "id": "function:packages/skill/src/context-builder.ts:buildChatContext",
       "type": "function",
       "name": "buildChatContext",
       "filePath": "packages/skill/src/context-builder.ts",
@@ -1418,7 +1418,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/skill/src/context-builder.ts:formatContextForPrompt",
+      "id": "function:packages/skill/src/context-builder.ts:formatContextForPrompt",
       "type": "function",
       "name": "formatContextForPrompt",
       "filePath": "packages/skill/src/context-builder.ts",
@@ -1451,7 +1451,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/skill/src/diff-analyzer.ts:buildDiffContext",
+      "id": "function:packages/skill/src/diff-analyzer.ts:buildDiffContext",
       "type": "function",
       "name": "buildDiffContext",
       "filePath": "packages/skill/src/diff-analyzer.ts",
@@ -1469,7 +1469,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/skill/src/diff-analyzer.ts:formatDiffAnalysis",
+      "id": "function:packages/skill/src/diff-analyzer.ts:formatDiffAnalysis",
       "type": "function",
       "name": "formatDiffAnalysis",
       "filePath": "packages/skill/src/diff-analyzer.ts",
@@ -1502,7 +1502,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/skill/src/explain-builder.ts:buildExplainContext",
+      "id": "function:packages/skill/src/explain-builder.ts:buildExplainContext",
       "type": "function",
       "name": "buildExplainContext",
       "filePath": "packages/skill/src/explain-builder.ts",
@@ -1520,7 +1520,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/skill/src/explain-builder.ts:formatExplainPrompt",
+      "id": "function:packages/skill/src/explain-builder.ts:formatExplainPrompt",
       "type": "function",
       "name": "formatExplainPrompt",
       "filePath": "packages/skill/src/explain-builder.ts",
@@ -1553,7 +1553,7 @@
       "complexity": "moderate"
     },
     {
-      "id": "func:packages/skill/src/onboard-builder.ts:buildOnboardingGuide",
+      "id": "function:packages/skill/src/onboard-builder.ts:buildOnboardingGuide",
       "type": "function",
       "name": "buildOnboardingGuide",
       "filePath": "packages/skill/src/onboard-builder.ts",
@@ -1585,7 +1585,7 @@
       "complexity": "simple"
     },
     {
-      "id": "func:packages/skill/src/understand-chat.ts:buildChatPrompt",
+      "id": "function:packages/skill/src/understand-chat.ts:buildChatPrompt",
       "type": "function",
       "name": "buildChatPrompt",
       "filePath": "packages/skill/src/understand-chat.ts",
@@ -1739,7 +1739,7 @@
     },
     {
       "source": "file:packages/core/src/schema.ts",
-      "target": "func:packages/core/src/schema.ts:validateGraph",
+      "target": "function:packages/core/src/schema.ts:validateGraph",
       "type": "contains",
       "direction": "forward",
       "weight": 1
@@ -1760,42 +1760,42 @@
     },
     {
       "source": "file:packages/core/src/embedding-search.ts",
-      "target": "func:packages/core/src/embedding-search.ts:cosineSimilarity",
+      "target": "function:packages/core/src/embedding-search.ts:cosineSimilarity",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/staleness.ts",
-      "target": "func:packages/core/src/staleness.ts:getChangedFiles",
+      "target": "function:packages/core/src/staleness.ts:getChangedFiles",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/staleness.ts",
-      "target": "func:packages/core/src/staleness.ts:isStale",
+      "target": "function:packages/core/src/staleness.ts:isStale",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/staleness.ts",
-      "target": "func:packages/core/src/staleness.ts:mergeGraphUpdate",
+      "target": "function:packages/core/src/staleness.ts:mergeGraphUpdate",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
-      "source": "func:packages/core/src/staleness.ts:isStale",
-      "target": "func:packages/core/src/staleness.ts:getChangedFiles",
+      "source": "function:packages/core/src/staleness.ts:isStale",
+      "target": "function:packages/core/src/staleness.ts:getChangedFiles",
       "type": "calls",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "class:packages/core/src/embedding-search.ts:SemanticSearchEngine",
-      "target": "func:packages/core/src/embedding-search.ts:cosineSimilarity",
+      "target": "function:packages/core/src/embedding-search.ts:cosineSimilarity",
       "type": "calls",
       "direction": "forward",
       "weight": 0.8
@@ -1830,7 +1830,7 @@
     },
     {
       "source": "file:packages/core/src/analyzer/graph-builder.ts",
-      "target": "func:packages/core/src/analyzer/graph-builder.ts:detectLanguage",
+      "target": "function:packages/core/src/analyzer/graph-builder.ts:detectLanguage",
       "type": "contains",
       "direction": "forward",
       "weight": 1
@@ -1844,56 +1844,56 @@
     },
     {
       "source": "file:packages/core/src/analyzer/llm-analyzer.ts",
-      "target": "func:packages/core/src/analyzer/llm-analyzer.ts:buildFileAnalysisPrompt",
+      "target": "function:packages/core/src/analyzer/llm-analyzer.ts:buildFileAnalysisPrompt",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/analyzer/llm-analyzer.ts",
-      "target": "func:packages/core/src/analyzer/llm-analyzer.ts:buildProjectSummaryPrompt",
+      "target": "function:packages/core/src/analyzer/llm-analyzer.ts:buildProjectSummaryPrompt",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/analyzer/llm-analyzer.ts",
-      "target": "func:packages/core/src/analyzer/llm-analyzer.ts:parseFileAnalysisResponse",
+      "target": "function:packages/core/src/analyzer/llm-analyzer.ts:parseFileAnalysisResponse",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/analyzer/llm-analyzer.ts",
-      "target": "func:packages/core/src/analyzer/llm-analyzer.ts:parseProjectSummaryResponse",
+      "target": "function:packages/core/src/analyzer/llm-analyzer.ts:parseProjectSummaryResponse",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/analyzer/llm-analyzer.ts",
-      "target": "func:packages/core/src/analyzer/llm-analyzer.ts:buildFileAnalysisPrompt",
+      "target": "function:packages/core/src/analyzer/llm-analyzer.ts:buildFileAnalysisPrompt",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/core/src/analyzer/llm-analyzer.ts",
-      "target": "func:packages/core/src/analyzer/llm-analyzer.ts:buildProjectSummaryPrompt",
+      "target": "function:packages/core/src/analyzer/llm-analyzer.ts:buildProjectSummaryPrompt",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/core/src/analyzer/llm-analyzer.ts",
-      "target": "func:packages/core/src/analyzer/llm-analyzer.ts:parseFileAnalysisResponse",
+      "target": "function:packages/core/src/analyzer/llm-analyzer.ts:parseFileAnalysisResponse",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/core/src/analyzer/llm-analyzer.ts",
-      "target": "func:packages/core/src/analyzer/llm-analyzer.ts:parseProjectSummaryResponse",
+      "target": "function:packages/core/src/analyzer/llm-analyzer.ts:parseProjectSummaryResponse",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
@@ -1907,56 +1907,56 @@
     },
     {
       "source": "file:packages/core/src/analyzer/layer-detector.ts",
-      "target": "func:packages/core/src/analyzer/layer-detector.ts:detectLayers",
+      "target": "function:packages/core/src/analyzer/layer-detector.ts:detectLayers",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/analyzer/layer-detector.ts",
-      "target": "func:packages/core/src/analyzer/layer-detector.ts:buildLayerDetectionPrompt",
+      "target": "function:packages/core/src/analyzer/layer-detector.ts:buildLayerDetectionPrompt",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/analyzer/layer-detector.ts",
-      "target": "func:packages/core/src/analyzer/layer-detector.ts:parseLayerDetectionResponse",
+      "target": "function:packages/core/src/analyzer/layer-detector.ts:parseLayerDetectionResponse",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/analyzer/layer-detector.ts",
-      "target": "func:packages/core/src/analyzer/layer-detector.ts:applyLLMLayers",
+      "target": "function:packages/core/src/analyzer/layer-detector.ts:applyLLMLayers",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/analyzer/layer-detector.ts",
-      "target": "func:packages/core/src/analyzer/layer-detector.ts:detectLayers",
+      "target": "function:packages/core/src/analyzer/layer-detector.ts:detectLayers",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/core/src/analyzer/layer-detector.ts",
-      "target": "func:packages/core/src/analyzer/layer-detector.ts:buildLayerDetectionPrompt",
+      "target": "function:packages/core/src/analyzer/layer-detector.ts:buildLayerDetectionPrompt",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/core/src/analyzer/layer-detector.ts",
-      "target": "func:packages/core/src/analyzer/layer-detector.ts:parseLayerDetectionResponse",
+      "target": "function:packages/core/src/analyzer/layer-detector.ts:parseLayerDetectionResponse",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/core/src/analyzer/layer-detector.ts",
-      "target": "func:packages/core/src/analyzer/layer-detector.ts:applyLLMLayers",
+      "target": "function:packages/core/src/analyzer/layer-detector.ts:applyLLMLayers",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
@@ -1970,49 +1970,49 @@
     },
     {
       "source": "file:packages/core/src/analyzer/language-lesson.ts",
-      "target": "func:packages/core/src/analyzer/language-lesson.ts:detectLanguageConcepts",
+      "target": "function:packages/core/src/analyzer/language-lesson.ts:detectLanguageConcepts",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/analyzer/language-lesson.ts",
-      "target": "func:packages/core/src/analyzer/language-lesson.ts:buildLanguageLessonPrompt",
+      "target": "function:packages/core/src/analyzer/language-lesson.ts:buildLanguageLessonPrompt",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/analyzer/language-lesson.ts",
-      "target": "func:packages/core/src/analyzer/language-lesson.ts:parseLanguageLessonResponse",
+      "target": "function:packages/core/src/analyzer/language-lesson.ts:parseLanguageLessonResponse",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/analyzer/language-lesson.ts",
-      "target": "func:packages/core/src/analyzer/language-lesson.ts:detectLanguageConcepts",
+      "target": "function:packages/core/src/analyzer/language-lesson.ts:detectLanguageConcepts",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/core/src/analyzer/language-lesson.ts",
-      "target": "func:packages/core/src/analyzer/language-lesson.ts:buildLanguageLessonPrompt",
+      "target": "function:packages/core/src/analyzer/language-lesson.ts:buildLanguageLessonPrompt",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/core/src/analyzer/language-lesson.ts",
-      "target": "func:packages/core/src/analyzer/language-lesson.ts:parseLanguageLessonResponse",
+      "target": "function:packages/core/src/analyzer/language-lesson.ts:parseLanguageLessonResponse",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
-      "source": "func:packages/core/src/analyzer/language-lesson.ts:buildLanguageLessonPrompt",
-      "target": "func:packages/core/src/analyzer/language-lesson.ts:detectLanguageConcepts",
+      "source": "function:packages/core/src/analyzer/language-lesson.ts:buildLanguageLessonPrompt",
+      "target": "function:packages/core/src/analyzer/language-lesson.ts:detectLanguageConcepts",
       "type": "calls",
       "direction": "forward",
       "weight": 0.8
@@ -2026,42 +2026,42 @@
     },
     {
       "source": "file:packages/core/src/analyzer/tour-generator.ts",
-      "target": "func:packages/core/src/analyzer/tour-generator.ts:buildTourGenerationPrompt",
+      "target": "function:packages/core/src/analyzer/tour-generator.ts:buildTourGenerationPrompt",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/analyzer/tour-generator.ts",
-      "target": "func:packages/core/src/analyzer/tour-generator.ts:parseTourGenerationResponse",
+      "target": "function:packages/core/src/analyzer/tour-generator.ts:parseTourGenerationResponse",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/analyzer/tour-generator.ts",
-      "target": "func:packages/core/src/analyzer/tour-generator.ts:generateHeuristicTour",
+      "target": "function:packages/core/src/analyzer/tour-generator.ts:generateHeuristicTour",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/analyzer/tour-generator.ts",
-      "target": "func:packages/core/src/analyzer/tour-generator.ts:buildTourGenerationPrompt",
+      "target": "function:packages/core/src/analyzer/tour-generator.ts:buildTourGenerationPrompt",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/core/src/analyzer/tour-generator.ts",
-      "target": "func:packages/core/src/analyzer/tour-generator.ts:parseTourGenerationResponse",
+      "target": "function:packages/core/src/analyzer/tour-generator.ts:parseTourGenerationResponse",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/core/src/analyzer/tour-generator.ts",
-      "target": "func:packages/core/src/analyzer/tour-generator.ts:generateHeuristicTour",
+      "target": "function:packages/core/src/analyzer/tour-generator.ts:generateHeuristicTour",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
@@ -2103,42 +2103,42 @@
     },
     {
       "source": "file:packages/core/src/plugins/tree-sitter-plugin.ts",
-      "target": "func:packages/core/src/plugins/tree-sitter-plugin.ts:languageKeyFromPath",
+      "target": "function:packages/core/src/plugins/tree-sitter-plugin.ts:languageKeyFromPath",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/plugins/tree-sitter-plugin.ts",
-      "target": "func:packages/core/src/plugins/tree-sitter-plugin.ts:traverse",
+      "target": "function:packages/core/src/plugins/tree-sitter-plugin.ts:traverse",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/plugins/tree-sitter-plugin.ts",
-      "target": "func:packages/core/src/plugins/tree-sitter-plugin.ts:getStringValue",
+      "target": "function:packages/core/src/plugins/tree-sitter-plugin.ts:getStringValue",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/plugins/tree-sitter-plugin.ts",
-      "target": "func:packages/core/src/plugins/tree-sitter-plugin.ts:extractParams",
+      "target": "function:packages/core/src/plugins/tree-sitter-plugin.ts:extractParams",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/plugins/tree-sitter-plugin.ts",
-      "target": "func:packages/core/src/plugins/tree-sitter-plugin.ts:extractReturnType",
+      "target": "function:packages/core/src/plugins/tree-sitter-plugin.ts:extractReturnType",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/plugins/tree-sitter-plugin.ts",
-      "target": "func:packages/core/src/plugins/tree-sitter-plugin.ts:extractImportSpecifiers",
+      "target": "function:packages/core/src/plugins/tree-sitter-plugin.ts:extractImportSpecifiers",
       "type": "contains",
       "direction": "forward",
       "weight": 1
@@ -2152,35 +2152,35 @@
     },
     {
       "source": "class:packages/core/src/plugins/tree-sitter-plugin.ts:TreeSitterPlugin",
-      "target": "func:packages/core/src/plugins/tree-sitter-plugin.ts:languageKeyFromPath",
+      "target": "function:packages/core/src/plugins/tree-sitter-plugin.ts:languageKeyFromPath",
       "type": "calls",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "class:packages/core/src/plugins/tree-sitter-plugin.ts:TreeSitterPlugin",
-      "target": "func:packages/core/src/plugins/tree-sitter-plugin.ts:extractParams",
+      "target": "function:packages/core/src/plugins/tree-sitter-plugin.ts:extractParams",
       "type": "calls",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "class:packages/core/src/plugins/tree-sitter-plugin.ts:TreeSitterPlugin",
-      "target": "func:packages/core/src/plugins/tree-sitter-plugin.ts:extractReturnType",
+      "target": "function:packages/core/src/plugins/tree-sitter-plugin.ts:extractReturnType",
       "type": "calls",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "class:packages/core/src/plugins/tree-sitter-plugin.ts:TreeSitterPlugin",
-      "target": "func:packages/core/src/plugins/tree-sitter-plugin.ts:extractImportSpecifiers",
+      "target": "function:packages/core/src/plugins/tree-sitter-plugin.ts:extractImportSpecifiers",
       "type": "calls",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "class:packages/core/src/plugins/tree-sitter-plugin.ts:TreeSitterPlugin",
-      "target": "func:packages/core/src/plugins/tree-sitter-plugin.ts:getStringValue",
+      "target": "function:packages/core/src/plugins/tree-sitter-plugin.ts:getStringValue",
       "type": "calls",
       "direction": "forward",
       "weight": 0.8
@@ -2208,28 +2208,28 @@
     },
     {
       "source": "file:packages/core/src/plugins/discovery.ts",
-      "target": "func:packages/core/src/plugins/discovery.ts:parsePluginConfig",
+      "target": "function:packages/core/src/plugins/discovery.ts:parsePluginConfig",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/plugins/discovery.ts",
-      "target": "func:packages/core/src/plugins/discovery.ts:serializePluginConfig",
+      "target": "function:packages/core/src/plugins/discovery.ts:serializePluginConfig",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/plugins/discovery.ts",
-      "target": "func:packages/core/src/plugins/discovery.ts:parsePluginConfig",
+      "target": "function:packages/core/src/plugins/discovery.ts:parsePluginConfig",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/core/src/plugins/discovery.ts",
-      "target": "func:packages/core/src/plugins/discovery.ts:serializePluginConfig",
+      "target": "function:packages/core/src/plugins/discovery.ts:serializePluginConfig",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
@@ -2250,63 +2250,63 @@
     },
     {
       "source": "file:packages/core/src/persistence/index.ts",
-      "target": "func:packages/core/src/persistence/index.ts:saveGraph",
+      "target": "function:packages/core/src/persistence/index.ts:saveGraph",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/persistence/index.ts",
-      "target": "func:packages/core/src/persistence/index.ts:loadGraph",
+      "target": "function:packages/core/src/persistence/index.ts:loadGraph",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/persistence/index.ts",
-      "target": "func:packages/core/src/persistence/index.ts:saveMeta",
+      "target": "function:packages/core/src/persistence/index.ts:saveMeta",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/persistence/index.ts",
-      "target": "func:packages/core/src/persistence/index.ts:loadMeta",
+      "target": "function:packages/core/src/persistence/index.ts:loadMeta",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/core/src/persistence/index.ts",
-      "target": "func:packages/core/src/persistence/index.ts:saveGraph",
+      "target": "function:packages/core/src/persistence/index.ts:saveGraph",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/core/src/persistence/index.ts",
-      "target": "func:packages/core/src/persistence/index.ts:loadGraph",
+      "target": "function:packages/core/src/persistence/index.ts:loadGraph",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/core/src/persistence/index.ts",
-      "target": "func:packages/core/src/persistence/index.ts:saveMeta",
+      "target": "function:packages/core/src/persistence/index.ts:saveMeta",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/core/src/persistence/index.ts",
-      "target": "func:packages/core/src/persistence/index.ts:loadMeta",
+      "target": "function:packages/core/src/persistence/index.ts:loadMeta",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
-      "source": "func:packages/core/src/persistence/index.ts:loadGraph",
-      "target": "func:packages/core/src/schema.ts:validateGraph",
+      "source": "function:packages/core/src/persistence/index.ts:loadGraph",
+      "target": "function:packages/core/src/schema.ts:validateGraph",
       "type": "calls",
       "direction": "forward",
       "weight": 0.8
@@ -2327,14 +2327,14 @@
     },
     {
       "source": "file:packages/dashboard/src/App.tsx",
-      "target": "func:packages/dashboard/src/App.tsx:App",
+      "target": "function:packages/dashboard/src/App.tsx:App",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/dashboard/src/App.tsx",
-      "target": "func:packages/dashboard/src/App.tsx:App",
+      "target": "function:packages/dashboard/src/App.tsx:App",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
@@ -2362,70 +2362,70 @@
     },
     {
       "source": "file:packages/dashboard/src/store.ts",
-      "target": "func:packages/dashboard/src/store.ts:buildSystemPrompt",
+      "target": "function:packages/dashboard/src/store.ts:buildSystemPrompt",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/dashboard/src/store.ts",
-      "target": "func:packages/dashboard/src/store.ts:getSortedTour",
+      "target": "function:packages/dashboard/src/store.ts:getSortedTour",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/dashboard/src/store.ts",
-      "target": "func:packages/dashboard/src/store.ts:useDashboardStore",
+      "target": "function:packages/dashboard/src/store.ts:useDashboardStore",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/dashboard/src/store.ts",
-      "target": "func:packages/dashboard/src/store.ts:useDashboardStore",
+      "target": "function:packages/dashboard/src/store.ts:useDashboardStore",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
-      "source": "func:packages/dashboard/src/store.ts:useDashboardStore",
-      "target": "func:packages/dashboard/src/store.ts:buildSystemPrompt",
+      "source": "function:packages/dashboard/src/store.ts:useDashboardStore",
+      "target": "function:packages/dashboard/src/store.ts:buildSystemPrompt",
       "type": "calls",
       "direction": "forward",
       "weight": 0.8
     },
     {
-      "source": "func:packages/dashboard/src/store.ts:useDashboardStore",
-      "target": "func:packages/dashboard/src/store.ts:getSortedTour",
+      "source": "function:packages/dashboard/src/store.ts:useDashboardStore",
+      "target": "function:packages/dashboard/src/store.ts:getSortedTour",
       "type": "calls",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/dashboard/src/utils/layout.ts",
-      "target": "func:packages/dashboard/src/utils/layout.ts:applyDagreLayout",
+      "target": "function:packages/dashboard/src/utils/layout.ts:applyDagreLayout",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/dashboard/src/utils/layout.ts",
-      "target": "func:packages/dashboard/src/utils/layout.ts:applyDagreLayout",
+      "target": "function:packages/dashboard/src/utils/layout.ts:applyDagreLayout",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/dashboard/src/components/GraphView.tsx",
-      "target": "func:packages/dashboard/src/components/GraphView.tsx:GraphView",
+      "target": "function:packages/dashboard/src/components/GraphView.tsx:GraphView",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/dashboard/src/components/GraphView.tsx",
-      "target": "func:packages/dashboard/src/components/GraphView.tsx:GraphView",
+      "target": "function:packages/dashboard/src/components/GraphView.tsx:GraphView",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
@@ -2445,29 +2445,29 @@
       "weight": 0.7
     },
     {
-      "source": "func:packages/dashboard/src/components/GraphView.tsx:GraphView",
-      "target": "func:packages/dashboard/src/utils/layout.ts:applyDagreLayout",
+      "source": "function:packages/dashboard/src/components/GraphView.tsx:GraphView",
+      "target": "function:packages/dashboard/src/utils/layout.ts:applyDagreLayout",
       "type": "calls",
       "direction": "forward",
       "weight": 0.8
     },
     {
-      "source": "func:packages/dashboard/src/components/GraphView.tsx:GraphView",
-      "target": "func:packages/dashboard/src/store.ts:useDashboardStore",
+      "source": "function:packages/dashboard/src/components/GraphView.tsx:GraphView",
+      "target": "function:packages/dashboard/src/store.ts:useDashboardStore",
       "type": "calls",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/dashboard/src/components/ChatPanel.tsx",
-      "target": "func:packages/dashboard/src/components/ChatPanel.tsx:ChatPanel",
+      "target": "function:packages/dashboard/src/components/ChatPanel.tsx:ChatPanel",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/dashboard/src/components/ChatPanel.tsx",
-      "target": "func:packages/dashboard/src/components/ChatPanel.tsx:ChatPanel",
+      "target": "function:packages/dashboard/src/components/ChatPanel.tsx:ChatPanel",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
@@ -2480,15 +2480,15 @@
       "weight": 0.7
     },
     {
-      "source": "func:packages/dashboard/src/components/ChatPanel.tsx:ChatPanel",
-      "target": "func:packages/dashboard/src/store.ts:useDashboardStore",
+      "source": "function:packages/dashboard/src/components/ChatPanel.tsx:ChatPanel",
+      "target": "function:packages/dashboard/src/store.ts:useDashboardStore",
       "type": "calls",
       "direction": "forward",
       "weight": 0.8
     },
     {
-      "source": "func:packages/dashboard/src/App.tsx:App",
-      "target": "func:packages/dashboard/src/store.ts:useDashboardStore",
+      "source": "function:packages/dashboard/src/App.tsx:App",
+      "target": "function:packages/dashboard/src/store.ts:useDashboardStore",
       "type": "calls",
       "direction": "forward",
       "weight": 0.8
@@ -2502,28 +2502,28 @@
     },
     {
       "source": "file:packages/dashboard/src/components/CodeViewer.tsx",
-      "target": "func:packages/dashboard/src/components/CodeViewer.tsx:getLanguage",
+      "target": "function:packages/dashboard/src/components/CodeViewer.tsx:getLanguage",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/dashboard/src/components/CodeViewer.tsx",
-      "target": "func:packages/dashboard/src/components/CodeViewer.tsx:CodeViewer",
+      "target": "function:packages/dashboard/src/components/CodeViewer.tsx:CodeViewer",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/dashboard/src/components/CodeViewer.tsx",
-      "target": "func:packages/dashboard/src/components/CodeViewer.tsx:CodeViewer",
+      "target": "function:packages/dashboard/src/components/CodeViewer.tsx:CodeViewer",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
-      "source": "func:packages/dashboard/src/components/CodeViewer.tsx:CodeViewer",
-      "target": "func:packages/dashboard/src/components/CodeViewer.tsx:getLanguage",
+      "source": "function:packages/dashboard/src/components/CodeViewer.tsx:CodeViewer",
+      "target": "function:packages/dashboard/src/components/CodeViewer.tsx:getLanguage",
       "type": "calls",
       "direction": "forward",
       "weight": 0.8
@@ -2537,14 +2537,14 @@
     },
     {
       "source": "file:packages/dashboard/src/components/CustomNode.tsx",
-      "target": "func:packages/dashboard/src/components/CustomNode.tsx:CustomNode",
+      "target": "function:packages/dashboard/src/components/CustomNode.tsx:CustomNode",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/dashboard/src/components/CustomNode.tsx",
-      "target": "func:packages/dashboard/src/components/CustomNode.tsx:CustomNode",
+      "target": "function:packages/dashboard/src/components/CustomNode.tsx:CustomNode",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
@@ -2565,49 +2565,49 @@
     },
     {
       "source": "file:packages/dashboard/src/components/LayerLegend.tsx",
-      "target": "func:packages/dashboard/src/components/LayerLegend.tsx:getLayerColor",
+      "target": "function:packages/dashboard/src/components/LayerLegend.tsx:getLayerColor",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/dashboard/src/components/LayerLegend.tsx",
-      "target": "func:packages/dashboard/src/components/LayerLegend.tsx:getLayerBorderColor",
+      "target": "function:packages/dashboard/src/components/LayerLegend.tsx:getLayerBorderColor",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/dashboard/src/components/LayerLegend.tsx",
-      "target": "func:packages/dashboard/src/components/LayerLegend.tsx:LayerLegend",
+      "target": "function:packages/dashboard/src/components/LayerLegend.tsx:LayerLegend",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/dashboard/src/components/LayerLegend.tsx",
-      "target": "func:packages/dashboard/src/components/LayerLegend.tsx:getLayerColor",
+      "target": "function:packages/dashboard/src/components/LayerLegend.tsx:getLayerColor",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/dashboard/src/components/LayerLegend.tsx",
-      "target": "func:packages/dashboard/src/components/LayerLegend.tsx:getLayerBorderColor",
+      "target": "function:packages/dashboard/src/components/LayerLegend.tsx:getLayerBorderColor",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/dashboard/src/components/LayerLegend.tsx",
-      "target": "func:packages/dashboard/src/components/LayerLegend.tsx:LayerLegend",
+      "target": "function:packages/dashboard/src/components/LayerLegend.tsx:LayerLegend",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
-      "source": "func:packages/dashboard/src/components/LayerLegend.tsx:LayerLegend",
-      "target": "func:packages/dashboard/src/components/LayerLegend.tsx:getLayerBorderColor",
+      "source": "function:packages/dashboard/src/components/LayerLegend.tsx:LayerLegend",
+      "target": "function:packages/dashboard/src/components/LayerLegend.tsx:getLayerBorderColor",
       "type": "calls",
       "direction": "forward",
       "weight": 0.8
@@ -2621,14 +2621,14 @@
     },
     {
       "source": "file:packages/dashboard/src/components/LearnPanel.tsx",
-      "target": "func:packages/dashboard/src/components/LearnPanel.tsx:LearnPanel",
+      "target": "function:packages/dashboard/src/components/LearnPanel.tsx:LearnPanel",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/dashboard/src/components/LearnPanel.tsx",
-      "target": "func:packages/dashboard/src/components/LearnPanel.tsx:LearnPanel",
+      "target": "function:packages/dashboard/src/components/LearnPanel.tsx:LearnPanel",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
@@ -2642,14 +2642,14 @@
     },
     {
       "source": "file:packages/dashboard/src/components/NodeInfo.tsx",
-      "target": "func:packages/dashboard/src/components/NodeInfo.tsx:NodeInfo",
+      "target": "function:packages/dashboard/src/components/NodeInfo.tsx:NodeInfo",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/dashboard/src/components/NodeInfo.tsx",
-      "target": "func:packages/dashboard/src/components/NodeInfo.tsx:NodeInfo",
+      "target": "function:packages/dashboard/src/components/NodeInfo.tsx:NodeInfo",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
@@ -2663,14 +2663,14 @@
     },
     {
       "source": "file:packages/dashboard/src/components/PersonaSelector.tsx",
-      "target": "func:packages/dashboard/src/components/PersonaSelector.tsx:PersonaSelector",
+      "target": "function:packages/dashboard/src/components/PersonaSelector.tsx:PersonaSelector",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/dashboard/src/components/PersonaSelector.tsx",
-      "target": "func:packages/dashboard/src/components/PersonaSelector.tsx:PersonaSelector",
+      "target": "function:packages/dashboard/src/components/PersonaSelector.tsx:PersonaSelector",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
@@ -2684,14 +2684,14 @@
     },
     {
       "source": "file:packages/dashboard/src/components/SearchBar.tsx",
-      "target": "func:packages/dashboard/src/components/SearchBar.tsx:SearchBar",
+      "target": "function:packages/dashboard/src/components/SearchBar.tsx:SearchBar",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/dashboard/src/components/SearchBar.tsx",
-      "target": "func:packages/dashboard/src/components/SearchBar.tsx:SearchBar",
+      "target": "function:packages/dashboard/src/components/SearchBar.tsx:SearchBar",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
@@ -2733,56 +2733,56 @@
     },
     {
       "source": "file:packages/skill/src/context-builder.ts",
-      "target": "func:packages/skill/src/context-builder.ts:buildChatContext",
+      "target": "function:packages/skill/src/context-builder.ts:buildChatContext",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/skill/src/context-builder.ts",
-      "target": "func:packages/skill/src/context-builder.ts:formatContextForPrompt",
+      "target": "function:packages/skill/src/context-builder.ts:formatContextForPrompt",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/skill/src/diff-analyzer.ts",
-      "target": "func:packages/skill/src/diff-analyzer.ts:buildDiffContext",
+      "target": "function:packages/skill/src/diff-analyzer.ts:buildDiffContext",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/skill/src/diff-analyzer.ts",
-      "target": "func:packages/skill/src/diff-analyzer.ts:formatDiffAnalysis",
+      "target": "function:packages/skill/src/diff-analyzer.ts:formatDiffAnalysis",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/skill/src/explain-builder.ts",
-      "target": "func:packages/skill/src/explain-builder.ts:buildExplainContext",
+      "target": "function:packages/skill/src/explain-builder.ts:buildExplainContext",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/skill/src/explain-builder.ts",
-      "target": "func:packages/skill/src/explain-builder.ts:formatExplainPrompt",
+      "target": "function:packages/skill/src/explain-builder.ts:formatExplainPrompt",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/skill/src/onboard-builder.ts",
-      "target": "func:packages/skill/src/onboard-builder.ts:buildOnboardingGuide",
+      "target": "function:packages/skill/src/onboard-builder.ts:buildOnboardingGuide",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/skill/src/understand-chat.ts",
-      "target": "func:packages/skill/src/understand-chat.ts:buildChatPrompt",
+      "target": "function:packages/skill/src/understand-chat.ts:buildChatPrompt",
       "type": "contains",
       "direction": "forward",
       "weight": 1
@@ -2795,92 +2795,92 @@
       "weight": 0.7
     },
     {
-      "source": "func:packages/skill/src/understand-chat.ts:buildChatPrompt",
-      "target": "func:packages/skill/src/context-builder.ts:buildChatContext",
+      "source": "function:packages/skill/src/understand-chat.ts:buildChatPrompt",
+      "target": "function:packages/skill/src/context-builder.ts:buildChatContext",
       "type": "calls",
       "direction": "forward",
       "weight": 0.8
     },
     {
-      "source": "func:packages/skill/src/understand-chat.ts:buildChatPrompt",
-      "target": "func:packages/skill/src/context-builder.ts:formatContextForPrompt",
+      "source": "function:packages/skill/src/understand-chat.ts:buildChatPrompt",
+      "target": "function:packages/skill/src/context-builder.ts:formatContextForPrompt",
       "type": "calls",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/skill/src/context-builder.ts",
-      "target": "func:packages/skill/src/context-builder.ts:formatContextForPrompt",
+      "target": "function:packages/skill/src/context-builder.ts:formatContextForPrompt",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/skill/src/context-builder.ts",
-      "target": "func:packages/skill/src/context-builder.ts:buildChatContext",
+      "target": "function:packages/skill/src/context-builder.ts:buildChatContext",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/skill/src/diff-analyzer.ts",
-      "target": "func:packages/skill/src/diff-analyzer.ts:buildDiffContext",
+      "target": "function:packages/skill/src/diff-analyzer.ts:buildDiffContext",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/skill/src/diff-analyzer.ts",
-      "target": "func:packages/skill/src/diff-analyzer.ts:formatDiffAnalysis",
+      "target": "function:packages/skill/src/diff-analyzer.ts:formatDiffAnalysis",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/skill/src/explain-builder.ts",
-      "target": "func:packages/skill/src/explain-builder.ts:buildExplainContext",
+      "target": "function:packages/skill/src/explain-builder.ts:buildExplainContext",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/skill/src/explain-builder.ts",
-      "target": "func:packages/skill/src/explain-builder.ts:formatExplainPrompt",
+      "target": "function:packages/skill/src/explain-builder.ts:formatExplainPrompt",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/skill/src/onboard-builder.ts",
-      "target": "func:packages/skill/src/onboard-builder.ts:buildOnboardingGuide",
+      "target": "function:packages/skill/src/onboard-builder.ts:buildOnboardingGuide",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
       "source": "file:packages/skill/src/understand-chat.ts",
-      "target": "func:packages/skill/src/understand-chat.ts:buildChatPrompt",
+      "target": "function:packages/skill/src/understand-chat.ts:buildChatPrompt",
       "type": "exports",
       "direction": "forward",
       "weight": 0.8
     },
     {
-      "source": "func:packages/skill/src/context-builder.ts:buildChatContext",
-      "target": "func:packages/skill/src/context-builder.ts:formatContextForPrompt",
+      "source": "function:packages/skill/src/context-builder.ts:buildChatContext",
+      "target": "function:packages/skill/src/context-builder.ts:formatContextForPrompt",
       "type": "related",
       "direction": "forward",
       "weight": 0.6
     },
     {
-      "source": "func:packages/skill/src/diff-analyzer.ts:buildDiffContext",
-      "target": "func:packages/skill/src/diff-analyzer.ts:formatDiffAnalysis",
+      "source": "function:packages/skill/src/diff-analyzer.ts:buildDiffContext",
+      "target": "function:packages/skill/src/diff-analyzer.ts:formatDiffAnalysis",
       "type": "related",
       "direction": "forward",
       "weight": 0.6
     },
     {
-      "source": "func:packages/skill/src/explain-builder.ts:buildExplainContext",
-      "target": "func:packages/skill/src/explain-builder.ts:formatExplainPrompt",
+      "source": "function:packages/skill/src/explain-builder.ts:buildExplainContext",
+      "target": "function:packages/skill/src/explain-builder.ts:formatExplainPrompt",
       "type": "related",
       "direction": "forward",
       "weight": 0.6
@@ -2977,7 +2977,7 @@
       "title": "Project Overview: The Dashboard Entry Point",
       "description": "Start with packages/dashboard/src/App.tsx, the root React component that bootstraps the entire interactive dashboard. On mount it fetches a pre-built knowledge-graph.json file and hands it to the Zustand store. From here you can see the three persona-adaptive layouts and how every major panel is composed together.",
       "nodeIds": [
-        "func:packages/dashboard/src/App.tsx:App"
+        "function:packages/dashboard/src/App.tsx:App"
       ],
       "languageLesson": "TypeScript conditional JSX with ternary chains is a clean pattern for persona-adaptive rendering without introducing a separate routing library."
     },
@@ -3061,7 +3061,7 @@
       "title": "Dashboard State: The Zustand Store",
       "description": "store.ts is the single source of truth for everything the dashboard displays. It holds the graph, search state, chat history, tour state, and persona. buildSystemPrompt assembles rich LLM context for the ChatPanel.",
       "nodeIds": [
-        "func:packages/dashboard/src/store.ts:useDashboardStore"
+        "function:packages/dashboard/src/store.ts:useDashboardStore"
       ],
       "languageLesson": "Zustand's create pattern is a TypeScript-idiomatic alternative to Redux. Selectors subscribe only to changed slices."
     },
@@ -3070,7 +3070,7 @@
       "title": "Visual Graph: React Flow with Dagre Layout",
       "description": "GraphView.tsx renders the knowledge graph as an interactive node-link diagram using React Flow. applyDagreLayout computes hierarchical positions, and tour-highlighted nodes receive distinct visual styles.",
       "nodeIds": [
-        "func:packages/dashboard/src/components/GraphView.tsx:GraphView"
+        "function:packages/dashboard/src/components/GraphView.tsx:GraphView"
       ]
     },
     {
@@ -3078,10 +3078,10 @@
       "title": "Skill Commands: AI-Powered Developer Tools",
       "description": "The skill package exposes four Claude Code slash commands. context-builder.ts does fuzzy search + 1-hop expansion. diff-analyzer.ts traces ripple effects from git diffs. explain-builder.ts resolves nodes for explanation. onboard-builder.ts generates markdown onboarding guides.",
       "nodeIds": [
-        "func:packages/skill/src/context-builder.ts:buildChatContext",
-        "func:packages/skill/src/diff-analyzer.ts:buildDiffContext",
-        "func:packages/skill/src/explain-builder.ts:buildExplainContext",
-        "func:packages/skill/src/onboard-builder.ts:buildOnboardingGuide"
+        "function:packages/skill/src/context-builder.ts:buildChatContext",
+        "function:packages/skill/src/diff-analyzer.ts:buildDiffContext",
+        "function:packages/skill/src/explain-builder.ts:buildExplainContext",
+        "function:packages/skill/src/onboard-builder.ts:buildOnboardingGuide"
       ]
     }
   ]

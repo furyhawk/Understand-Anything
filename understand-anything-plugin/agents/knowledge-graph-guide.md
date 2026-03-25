@@ -36,7 +36,7 @@ The JSON has this top-level shape:
 | Type | ID Convention | Description |
 |---|---|---|
 | `file` | `file:<relative-path>` | Source file |
-| `function` | `func:<relative-path>:<name>` | Function or method |
+| `function` | `function:<relative-path>:<name>` | Function or method |
 | `class` | `class:<relative-path>:<name>` | Class, interface, or type |
 | `module` | `module:<name>` | Logical module or package |
 | `concept` | `concept:<name>` | Abstract concept or pattern |

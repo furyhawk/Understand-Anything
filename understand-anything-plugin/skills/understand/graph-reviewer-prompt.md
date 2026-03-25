@@ -29,7 +29,7 @@ Verify every **node** has ALL required fields with correct types:
 
 | Field | Type | Constraint |
 |---|---|---|
-| `id` | string | Non-empty, follows prefix convention (`file:`, `func:`, `class:`, `module:`, or `concept:`) |
+| `id` | string | Non-empty, follows prefix convention (`file:`, `function:`, `class:`, `module:`, or `concept:`) |
 | `type` | string | One of: `file`, `function`, `class`, `module`, `concept` |
 | `name` | string | Non-empty |
 | `summary` | string | Non-empty, not just the filename |

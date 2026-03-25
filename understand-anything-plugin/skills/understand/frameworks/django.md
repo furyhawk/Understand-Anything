@@ -38,7 +38,7 @@ When analyzing a Django project, apply these additional conventions on top of th
 
 **Signal wiring** — When `signals.py` uses `post_save.connect(handler, sender=Model)` or `@receiver(post_save, sender=Model)`, create `subscribes` edges from the signal handler function to the model class. Create `publishes` edges from the model to the signal handler to show the trigger direction.
 
-**ORM relationships** — When `models.py` defines `ForeignKey`, `OneToOneField`, or `ManyToManyField`, create `relates_to` edges (use `depends_on` edge type) between the model classes with a description indicating the relationship type and cardinality.
+**ORM relationships** — When `models.py` defines `ForeignKey`, `OneToOneField`, or `ManyToManyField`, create `depends_on` edges between the model classes with a description indicating the relationship type and cardinality.
 
 **Serializer-to-model binding** — When a DRF serializer has `model = MyModel` in its `Meta` class, create a `depends_on` edge from the serializer to the model.
 
