@@ -110,4 +110,68 @@ describe("PluginRegistry", () => {
     const result = registry.analyzeFile("main.py", "print('hello')");
     expect(result).toBeNull();
   });
+
+  it("unregister rebuilds language map correctly", () => {
+    const registry = new PluginRegistry();
+    const plugin1 = createMockPlugin("plugin1", ["typescript", "javascript"]);
+    const plugin2 = createMockPlugin("plugin2", ["python"]);
+
+    registry.register(plugin1);
+    registry.register(plugin2);
+
+    expect(registry.getPluginForLanguage("typescript")).toBe(plugin1);
+    expect(registry.getPluginForLanguage("python")).toBe(plugin2);
+
+    registry.unregister("plugin1");
+
+    expect(registry.getPluginForLanguage("typescript")).toBeNull();
+    expect(registry.getPluginForLanguage("python")).toBe(plugin2);
+  });
+
+  it("unregister does nothing for non-existent plugin", () => {
+    const registry = new PluginRegistry();
+    const plugin = createMockPlugin("existing", ["typescript"]);
+    registry.register(plugin);
+
+    registry.unregister("non-existent");
+
+    expect(registry.getPlugins()).toHaveLength(1);
+    expect(registry.getPluginForLanguage("typescript")).toBe(plugin);
+  });
+
+  it("getLanguageForFile returns correct language id", () => {
+    const registry = new PluginRegistry();
+    registry.register(createMockPlugin("ts-plugin", ["typescript"]));
+
+    expect(registry.getLanguageForFile("src/index.ts")).toBe("typescript");
+    expect(registry.getLanguageForFile("src/component.tsx")).toBe("typescript");
+  });
+
+  it("getLanguageForFile returns null for unsupported extensions", () => {
+    const registry = new PluginRegistry();
+    registry.register(createMockPlugin("ts-plugin", ["typescript"]));
+
+    expect(registry.getLanguageForFile("unknown.xyz")).toBeNull();
+  });
+
+  it("resolveImports delegates to correct plugin", () => {
+    const registry = new PluginRegistry();
+    const plugin = createMockPlugin("ts-plugin", ["typescript"]);
+    const mockImports: ImportResolution[] = [
+      { importPath: "./utils", resolvedPath: "./utils.ts" },
+    ];
+    plugin.resolveImports = () => mockImports;
+    registry.register(plugin);
+
+    const result = registry.resolveImports("src/index.ts", "import './utils'");
+    expect(result).toEqual(mockImports);
+  });
+
+  it("resolveImports returns null for unsupported files", () => {
+    const registry = new PluginRegistry();
+    registry.register(createMockPlugin("ts-plugin", ["typescript"]));
+
+    const result = registry.resolveImports("main.py", "import os");
+    expect(result).toBeNull();
+  });
 });

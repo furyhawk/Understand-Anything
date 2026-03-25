@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   parsePluginConfig,
+  serializePluginConfig,
   type PluginConfig,
   type PluginEntry,
   DEFAULT_PLUGIN_CONFIG,
@@ -53,6 +54,22 @@ describe("plugin-discovery", () => {
       const config = parsePluginConfig(json);
       expect(config.plugins[0].enabled).toBe(true);
     });
+
+    it("returns default config when plugins field is not an array", () => {
+      const json = JSON.stringify({
+        plugins: "not an array",
+      });
+      const config = parsePluginConfig(json);
+      expect(config).toEqual(DEFAULT_PLUGIN_CONFIG);
+    });
+
+    it("returns default config when plugins field is missing", () => {
+      const json = JSON.stringify({
+        someOtherField: "value",
+      });
+      const config = parsePluginConfig(json);
+      expect(config).toEqual(DEFAULT_PLUGIN_CONFIG);
+    });
   });
 
   describe("DEFAULT_PLUGIN_CONFIG", () => {
@@ -60,6 +77,40 @@ describe("plugin-discovery", () => {
       expect(DEFAULT_PLUGIN_CONFIG.plugins).toHaveLength(1);
       expect(DEFAULT_PLUGIN_CONFIG.plugins[0].name).toBe("tree-sitter");
       expect(DEFAULT_PLUGIN_CONFIG.plugins[0].enabled).toBe(true);
+    });
+  });
+
+  describe("serializePluginConfig", () => {
+    it("serializes plugin config to formatted JSON", () => {
+      const config: PluginConfig = {
+        plugins: [
+          {
+            name: "tree-sitter",
+            enabled: true,
+            languages: ["typescript", "javascript"],
+          },
+        ],
+      };
+      const json = serializePluginConfig(config);
+      expect(json).toContain('"name": "tree-sitter"');
+      expect(json).toContain('"enabled": true');
+      expect(json).toContain('"languages"');
+    });
+
+    it("serializes config with options field", () => {
+      const config: PluginConfig = {
+        plugins: [
+          {
+            name: "custom-plugin",
+            enabled: true,
+            languages: ["python"],
+            options: { strict: true, timeout: 5000 },
+          },
+        ],
+      };
+      const json = serializePluginConfig(config);
+      expect(json).toContain('"options"');
+      expect(json).toContain('"strict": true');
     });
   });
 });

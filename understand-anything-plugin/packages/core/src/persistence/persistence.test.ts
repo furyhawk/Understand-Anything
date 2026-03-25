@@ -92,6 +92,24 @@ describe("persistence", () => {
       const loaded = loadGraph(tempDir);
       expect(loaded).toBeNull();
     });
+
+    it("should throw error when loading invalid graph", () => {
+      const invalidGraph = { ...sampleGraph, version: 123 }; // Invalid version type
+      saveGraph(tempDir, invalidGraph as unknown as KnowledgeGraph);
+
+      expect(() => {
+        loadGraph(tempDir);
+      }).toThrow(/Invalid knowledge graph/);
+    });
+
+    it("should skip validation when validate option is false", () => {
+      const invalidGraph = { ...sampleGraph, version: 123 };
+      saveGraph(tempDir, invalidGraph as unknown as KnowledgeGraph);
+
+      const loaded = loadGraph(tempDir, { validate: false });
+      expect(loaded).not.toBeNull();
+      expect(loaded?.version).toBe(123);
+    });
   });
 
   describe("saveMeta / loadMeta", () => {

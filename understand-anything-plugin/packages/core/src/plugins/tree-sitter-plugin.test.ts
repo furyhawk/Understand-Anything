@@ -142,6 +142,31 @@ export default class AppController {}
       expect(exportNames).toContain("default");
     });
 
+    it("should handle export with aliases", () => {
+      const code = `
+const originalName = () => true;
+export { originalName as renamedExport };
+`;
+      const result = plugin.analyzeFile("test.ts", code);
+
+      const exportNames = result.exports.map((e) => e.name);
+      expect(exportNames).toContain("renamedExport");
+    });
+
+    it("should handle arrow functions without parameters", () => {
+      const code = `
+const noParams = () => { return 42; };
+const withReturn = () => "hello";
+`;
+      const result = plugin.analyzeFile("test.ts", code);
+
+      expect(result.functions).toHaveLength(2);
+      expect(result.functions[0].name).toBe("noParams");
+      expect(result.functions[0].params).toEqual([]);
+      expect(result.functions[1].name).toBe("withReturn");
+      expect(result.functions[1].params).toEqual([]);
+    });
+
     it("should extract functions from JavaScript files", () => {
       const code = `
 function hello() {
