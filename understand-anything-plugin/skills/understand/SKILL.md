@@ -89,6 +89,9 @@ After the subagent completes, read `$PROJECT_ROOT/.understand-anything/intermedi
 - Languages, frameworks
 - File list with line counts
 - Complexity estimate
+- Import map (`importMap`): pre-resolved project-internal imports per file
+
+Store `importMap` in memory as `$IMPORT_MAP` for use in Phase 2 batch construction.
 
 **Gate check:** If >200 files, inform the user and suggest scoping with a subdirectory argument. Proceed only if user confirms or add guidance that this may take a while.
 
@@ -98,15 +101,21 @@ After the subagent completes, read `$PROJECT_ROOT/.understand-anything/intermedi
 
 ### Full analysis path
 
-Batch the file list from Phase 1 into groups of **5-10 files each** (aim for balanced batch sizes).
+Batch the file list from Phase 1 into groups of **20-30 files each** (aim for ~25 files per batch for balanced sizes).
 
-For each batch, dispatch a subagent using the prompt template at `./file-analyzer-prompt.md`. Run up to **3 subagents concurrently** using parallel dispatch. Pass the template as the subagent's prompt, appending the following additional context:
+For each batch, dispatch a subagent using the prompt template at `./file-analyzer-prompt.md`. Run up to **5 subagents concurrently** using parallel dispatch. Pass the template as the subagent's prompt, appending the following additional context:
 
 > **Additional context from main session:**
 >
 > Project: `<projectName>` — `<projectDescription>`
-> Frameworks detected: `<frameworks from Phase 1>`
 > Languages: `<languages from Phase 1>`
+
+Before dispatching each batch, construct `batchImportData` from `$IMPORT_MAP`:
+```json
+batchImportData = {}
+for each file in this batch:
+  batchImportData[file.path] = $IMPORT_MAP[file.path] ?? []
+```
 
 Fill in batch-specific parameters below and dispatch:
 
@@ -117,8 +126,10 @@ Fill in batch-specific parameters below and dispatch:
 > Batch index: `<batchIndex>`
 > Write output to: `$PROJECT_ROOT/.understand-anything/intermediate/batch-<batchIndex>.json`
 >
-> All project files (for import resolution):
-> `<full file path list from scan>`
+> Pre-resolved import data for this batch (use this for all import edge creation — do NOT re-resolve imports from source):
+> ```json
+> <batchImportData JSON>
+> ```
 >
 > Files to analyze in this batch:
 > 1. `<path>` (<sizeLines> lines)
@@ -131,7 +142,7 @@ After ALL batches complete, read each `batch-<N>.json` file and merge:
 
 ### Incremental update path
 
-Use the changed files list from Phase 0. Batch and dispatch file-analyzer subagents using the same process as above, but only for changed files.
+Use the changed files list from Phase 0. Batch and dispatch file-analyzer subagents using the same process as above (20-30 files per batch, up to 5 concurrent, with batchImportData constructed from $IMPORT_MAP), but only for changed files.
 
 After batches complete, merge with the existing graph:
 1. Remove old nodes whose `filePath` matches any changed file
