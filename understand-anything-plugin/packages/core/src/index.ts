@@ -90,3 +90,19 @@ export {
   classifyUpdate,
   type UpdateDecision,
 } from "./change-classifier.js";
+// Non-code parsers
+export {
+  MarkdownParser,
+  YAMLConfigParser,
+  JSONConfigParser,
+  TOMLParser,
+  EnvParser,
+  DockerfileParser,
+  SQLParser,
+  GraphQLParser,
+  ProtobufParser,
+  TerraformParser,
+  MakefileParser,
+  ShellParser,
+  registerAllParsers,
+} from "./plugins/parsers/index.js";
