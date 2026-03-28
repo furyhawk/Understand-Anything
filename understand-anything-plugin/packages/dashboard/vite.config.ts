@@ -44,7 +44,8 @@ export default defineConfig({
           const pathname = url.pathname;
           const isProtectedEndpoint =
             pathname === "/knowledge-graph.json" ||
-            pathname === "/diff-overlay.json";
+            pathname === "/diff-overlay.json" ||
+            pathname === "/meta.json";
 
           if (!isProtectedEndpoint) {
             next();
@@ -63,6 +64,8 @@ export default defineConfig({
           const fileName =
             pathname === "/diff-overlay.json"
               ? "diff-overlay.json"
+              : pathname === "/meta.json"
+              ? "meta.json"
               : "knowledge-graph.json";
 
           const graphDir = process.env.GRAPH_DIR;
@@ -128,13 +131,12 @@ export default defineConfig({
           }
 
           // No matching file found on disk.
-          if (pathname === "/diff-overlay.json") {
-            res.statusCode = 404;
-            res.end();
-          } else {
-            res.statusCode = 404;
+          res.statusCode = 404;
+          if (pathname === "/knowledge-graph.json") {
             res.setHeader("Content-Type", "application/json");
             res.end(JSON.stringify({ error: "No knowledge graph found. Run /understand first." }));
+          } else {
+            res.end();
           }
         });
       },

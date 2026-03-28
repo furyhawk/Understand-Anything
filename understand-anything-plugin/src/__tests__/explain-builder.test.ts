@@ -14,17 +14,17 @@ const sampleGraph: KnowledgeGraph = {
   },
   nodes: [
     { id: "file:src/auth.ts", type: "file", name: "auth.ts", filePath: "src/auth.ts", summary: "Auth module", tags: ["auth"], complexity: "complex" },
-    { id: "func:src/auth.ts:login", type: "function", name: "login", filePath: "src/auth.ts", lineRange: [10, 30], summary: "Login handler", tags: ["auth", "login"], complexity: "moderate" },
-    { id: "func:src/auth.ts:verify", type: "function", name: "verify", filePath: "src/auth.ts", lineRange: [32, 50], summary: "Token verification", tags: ["auth", "jwt"], complexity: "moderate" },
+    { id: "function:src/auth.ts:login", type: "function", name: "login", filePath: "src/auth.ts", lineRange: [10, 30], summary: "Login handler", tags: ["auth", "login"], complexity: "moderate" },
+    { id: "function:src/auth.ts:verify", type: "function", name: "verify", filePath: "src/auth.ts", lineRange: [32, 50], summary: "Token verification", tags: ["auth", "jwt"], complexity: "moderate" },
     { id: "file:src/db.ts", type: "file", name: "db.ts", filePath: "src/db.ts", summary: "Database", tags: ["db"], complexity: "simple" },
   ],
   edges: [
-    { source: "file:src/auth.ts", target: "func:src/auth.ts:login", type: "contains", direction: "forward", weight: 1.0 },
-    { source: "file:src/auth.ts", target: "func:src/auth.ts:verify", type: "contains", direction: "forward", weight: 1.0 },
-    { source: "func:src/auth.ts:login", target: "file:src/db.ts", type: "reads_from", direction: "forward", weight: 0.8 },
+    { source: "file:src/auth.ts", target: "function:src/auth.ts:login", type: "contains", direction: "forward", weight: 1.0 },
+    { source: "file:src/auth.ts", target: "function:src/auth.ts:verify", type: "contains", direction: "forward", weight: 1.0 },
+    { source: "function:src/auth.ts:login", target: "file:src/db.ts", type: "reads_from", direction: "forward", weight: 0.8 },
   ],
   layers: [
-    { id: "layer:auth", name: "Auth Layer", description: "Authentication", nodeIds: ["file:src/auth.ts", "func:src/auth.ts:login", "func:src/auth.ts:verify"] },
+    { id: "layer:auth", name: "Auth Layer", description: "Authentication", nodeIds: ["file:src/auth.ts", "function:src/auth.ts:login", "function:src/auth.ts:verify"] },
   ],
   tour: [],
 };

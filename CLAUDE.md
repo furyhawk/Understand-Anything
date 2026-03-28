@@ -51,7 +51,45 @@ An open-source tool combining LLM intelligence + static analysis to produce inte
 - **tree-sitter**: Uses `web-tree-sitter` (WASM) instead of native `tree-sitter` — native bindings fail on darwin/arm64 + Node 24
 - **Dashboard imports**: Dashboard must only import from core's browser-safe subpath exports (`./search`, `./types`, `./schema`), never the main entry point which pulls in Node.js modules
 
+## Scripts
+- `scripts/generate-large-graph.mjs` — Generates a fake knowledge graph for performance testing (e.g. large-graph layout). Writes to `.understand-anything/knowledge-graph.json`. Usage: `node scripts/generate-large-graph.mjs [nodeCount]` (default: 3000 nodes). Not part of the production pipeline.
+
 ## Versioning
-When pushing to remote, bump the version in **both** of these files (keep them in sync):
+When pushing to remote, bump the version in **all four** of these files (keep them in sync):
 - `understand-anything-plugin/package.json` → `"version"` field
 - `.claude-plugin/marketplace.json` → `plugins[0].version` field
+- `.claude-plugin/plugin.json` → `"version"` field
+- `.cursor-plugin/plugin.json` → `"version"` field
+
+## Testing Local Plugin Changes
+
+Claude Code caches installed plugins at `~/.claude/plugins/cache/understand-anything/understand-anything/<version>/`. Symlinks don't work because Claude's Search/Glob tools can't follow them. To test local changes:
+
+1. **Build the packages:**
+   ```bash
+   pnpm --filter @understand-anything/core build
+   pnpm --filter @understand-anything/skill build
+   ```
+
+2. **Find the installed version** (must match what the marketplace currently serves):
+   ```bash
+   ls ~/.claude/plugins/cache/understand-anything/understand-anything/
+   ```
+
+3. **Copy your local plugin into the cache**, replacing `<VERSION>` with the version from step 2:
+   ```bash
+   rm -rf ~/.claude/plugins/cache/understand-anything/understand-anything/<VERSION>
+   cp -R ./understand-anything-plugin ~/.claude/plugins/cache/understand-anything/understand-anything/<VERSION>
+   ```
+
+4. **Start a fresh Claude Code session** (existing sessions cache the old prompts in context).
+
+5. **Run `/understand --full`** in the target project to verify.
+
+**Re-sync after further changes:**
+```bash
+pnpm --filter @understand-anything/core build && \
+cp -R ./understand-anything-plugin/* ~/.claude/plugins/cache/understand-anything/understand-anything/<VERSION>/
+```
+
+**To revert to upstream:** Uninstall and reinstall the plugin from the marketplace — it repopulates the cache from the upstream repo.

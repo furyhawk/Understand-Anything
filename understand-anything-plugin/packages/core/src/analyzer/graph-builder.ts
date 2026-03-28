@@ -117,7 +117,7 @@ export class GraphBuilder {
 
     // Create function nodes with "contains" edges
     for (const fn of analysis.functions) {
-      const funcId = `func:${filePath}:${fn.name}`;
+      const funcId = `function:${filePath}:${fn.name}`;
       this.nodes.push({
         id: funcId,
         type: "function",
@@ -179,8 +179,8 @@ export class GraphBuilder {
     calleeFunc: string,
   ): void {
     this.edges.push({
-      source: `func:${callerFile}:${callerFunc}`,
-      target: `func:${calleeFile}:${calleeFunc}`,
+      source: `function:${callerFile}:${callerFunc}`,
+      target: `function:${calleeFile}:${calleeFunc}`,
       type: "calls",
       direction: "forward",
       weight: 0.8,

@@ -1,30 +1,21 @@
 import type { AnalyzerPlugin, StructuralAnalysis, ImportResolution } from "../types.js";
-
-const EXTENSION_TO_LANGUAGE: Record<string, string> = {
-  ts: "typescript",
-  tsx: "typescript",
-  js: "javascript",
-  jsx: "javascript",
-  py: "python",
-  go: "go",
-  rs: "rust",
-  rb: "ruby",
-  java: "java",
-  kt: "kotlin",
-  cs: "csharp",
-  cpp: "cpp",
-  c: "c",
-  swift: "swift",
-  php: "php",
-};
+import { LanguageRegistry } from "../languages/language-registry.js";
 
 /**
  * Registry for analyzer plugins. Maps languages to plugins and provides
  * a unified interface for analyzing files across languages.
+ *
+ * Uses LanguageRegistry for extension-to-language mapping instead of
+ * a hardcoded lookup table.
  */
 export class PluginRegistry {
   private plugins: AnalyzerPlugin[] = [];
   private languageMap = new Map<string, AnalyzerPlugin>();
+  private languageRegistry: LanguageRegistry;
+
+  constructor(languageRegistry?: LanguageRegistry) {
+    this.languageRegistry = languageRegistry ?? LanguageRegistry.createDefault();
+  }
 
   register(plugin: AnalyzerPlugin): void {
     this.plugins.push(plugin);
@@ -50,11 +41,16 @@ export class PluginRegistry {
   }
 
   getPluginForFile(filePath: string): AnalyzerPlugin | null {
-    const ext = filePath.split(".").pop()?.toLowerCase();
-    if (!ext) return null;
-    const language = EXTENSION_TO_LANGUAGE[ext];
-    if (!language) return null;
-    return this.getPluginForLanguage(language);
+    const langConfig = this.languageRegistry.getForFile(filePath);
+    if (!langConfig) return null;
+    return this.getPluginForLanguage(langConfig.id);
+  }
+
+  /**
+   * Get the language id for a file path using the language registry.
+   */
+  getLanguageForFile(filePath: string): string | null {
+    return this.languageRegistry.getForFile(filePath)?.id ?? null;
   }
 
   analyzeFile(filePath: string, content: string): StructuralAnalysis | null {

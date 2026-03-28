@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <a href="README.md">English</a> | <a href="README.zh-CN.md">中文</a> | <a href="README.ja-JP.md">日本語</a>
+  <a href="README.md">English</a> | <a href="README.zh-CN.md">中文</a> | <a href="README.ja-JP.md">日本語</a> | <a href="README.tr-TR.md">Türkçe</a>
 </p>
 
 <p align="center">
@@ -145,6 +145,20 @@ Antigravityに以下を伝えてください：
 Fetch and follow instructions from https://raw.githubusercontent.com/Lum1104/Understand-Anything/refs/heads/main/.antigravity/INSTALL.md
 ```
 
+### Gemini CLI
+
+Gemini CLIに以下を伝えてください：
+```text
+Fetch and follow instructions from https://raw.githubusercontent.com/Lum1104/Understand-Anything/refs/heads/main/.gemini/INSTALL.md
+```
+
+### Pi Agent
+
+Pi Agentに以下を伝えてください：
+```text
+Fetch and follow instructions from https://raw.githubusercontent.com/Lum1104/Understand-Anything/refs/heads/main/.pi/INSTALL.md
+```
+
 ### プラットフォーム互換性
 
 | プラットフォーム | ステータス | インストール方法 |
@@ -155,6 +169,8 @@ Fetch and follow instructions from https://raw.githubusercontent.com/Lum1104/Und
 | OpenClaw | ✅ サポート | AI駆動インストール |
 | Cursor | ✅ サポート | 自動検出 |
 | Antigravity | ✅ サポート | AI駆動インストール |
+| Gemini CLI | ✅ サポート | AI駆動インストール |
+| Pi Agent | ✅ サポート | AI駆動インストール |
 
 ---
 

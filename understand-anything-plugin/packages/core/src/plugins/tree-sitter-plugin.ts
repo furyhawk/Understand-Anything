@@ -6,6 +6,7 @@ import type {
   ImportResolution,
   CallGraphEntry,
 } from "../types.js";
+import type { LanguageConfig } from "../languages/types.js";
 
 // web-tree-sitter uses CJS internally; we need createRequire for .wasm resolution
 const require = createRequire(import.meta.url);
@@ -13,23 +14,6 @@ const require = createRequire(import.meta.url);
 type TreeSitterParser = import("web-tree-sitter").Parser;
 type TreeSitterLanguage = import("web-tree-sitter").Language;
 type TreeSitterNode = import("web-tree-sitter").Node;
-
-function languageKeyFromPath(filePath: string): string {
-  const ext = extname(filePath).toLowerCase();
-  switch (ext) {
-    case ".ts":
-      return "typescript";
-    case ".tsx":
-      return "tsx";
-    case ".js":
-    case ".mjs":
-    case ".cjs":
-    case ".jsx":
-      return "javascript";
-    default:
-      throw new Error(`Unsupported file extension: ${ext}`);
-  }
-}
 
 /**
  * Recursively traverse an AST tree, calling the visitor for each node.
@@ -155,16 +139,76 @@ function extractImportSpecifiers(
   return specifiers;
 }
 
+/**
+ * Config-driven tree-sitter plugin.
+ *
+ * Accepts LanguageConfig objects to determine which languages to support
+ * and how to load their WASM grammars. Currently provides deep structural
+ * analysis for TypeScript/JavaScript; other languages with tree-sitter configs
+ * get basic function/class/import extraction.
+ *
+ * Languages without tree-sitter configs are gracefully skipped (the LLM
+ * agent handles analysis for those).
+ */
 export class TreeSitterPlugin implements AnalyzerPlugin {
   readonly name = "tree-sitter";
-  readonly languages = ["typescript", "javascript"];
+  readonly languages: string[];
+
+  private configs: LanguageConfig[];
 
   // Pre-loaded parser constructor and languages (set by init())
   private _ParserClass:
     | (new () => TreeSitterParser)
     | null = null;
   private _languages = new Map<string, TreeSitterLanguage>();
+  private _extensionToLang = new Map<string, string>();
   private _initialized = false;
+
+  /**
+   * Create a TreeSitterPlugin with the given language configs.
+   * Only configs that have a `treeSitter` field will be loaded.
+   * If no configs are provided, defaults to TypeScript and JavaScript.
+   */
+  constructor(configs?: LanguageConfig[]) {
+    if (configs) {
+      this.configs = configs.filter((c) => c.treeSitter);
+    } else {
+      // Default: TS/JS for backward compatibility
+      this.configs = [];
+    }
+
+    // Derive supported languages and extension map from configs
+    const langs: string[] = [];
+    for (const config of this.configs) {
+      langs.push(config.id);
+      for (const ext of config.extensions) {
+        const key = ext.startsWith(".") ? ext : `.${ext}`;
+        this._extensionToLang.set(key, config.id);
+      }
+    }
+
+    // Fallback for backward compat when no configs provided
+    if (langs.length === 0) {
+      langs.push("typescript", "javascript");
+      this._extensionToLang.set(".ts", "typescript");
+      this._extensionToLang.set(".tsx", "typescript");
+      this._extensionToLang.set(".js", "javascript");
+      this._extensionToLang.set(".mjs", "javascript");
+      this._extensionToLang.set(".cjs", "javascript");
+      this._extensionToLang.set(".jsx", "javascript");
+    }
+
+    this.languages = langs;
+  }
+
+  private languageKeyFromPath(filePath: string): string | null {
+    const ext = extname(filePath).toLowerCase();
+
+    // Special case: .tsx needs its own grammar
+    if (ext === ".tsx") return "tsx";
+
+    return this._extensionToLang.get(ext) ?? null;
+  }
 
   /**
    * Initialize the plugin by loading the WASM module and all language grammars.
@@ -180,26 +224,68 @@ export class TreeSitterPlugin implements AnalyzerPlugin {
     await ParserCls.init();
     this._ParserClass = ParserCls as unknown as new () => TreeSitterParser;
 
-    // Pre-load all supported language grammars
-    const tsWasm = require.resolve(
-      "tree-sitter-typescript/tree-sitter-typescript.wasm",
-    );
-    const tsxWasm = require.resolve(
-      "tree-sitter-typescript/tree-sitter-tsx.wasm",
-    );
-    const jsWasm = require.resolve(
-      "tree-sitter-javascript/tree-sitter-javascript.wasm",
-    );
+    if (this.configs.length > 0) {
+      // Load grammars from configs
+      const loadPromises: Promise<void>[] = [];
 
-    const [tsLang, tsxLang, jsLang] = await Promise.all([
-      LanguageCls.load(tsWasm),
-      LanguageCls.load(tsxWasm),
-      LanguageCls.load(jsWasm),
-    ]);
+      for (const config of this.configs) {
+        if (!config.treeSitter) continue;
 
-    this._languages.set("typescript", tsLang);
-    this._languages.set("tsx", tsxLang);
-    this._languages.set("javascript", jsLang);
+        const loadGrammar = async () => {
+          try {
+            const wasmPath = require.resolve(
+              `${config.treeSitter!.wasmPackage}/${config.treeSitter!.wasmFile}`,
+            );
+            const lang = await LanguageCls.load(wasmPath);
+            this._languages.set(config.id, lang);
+
+            // Special handling for TypeScript: also load TSX grammar
+            if (config.id === "typescript") {
+              try {
+                const tsxWasm = require.resolve(
+                  `${config.treeSitter!.wasmPackage}/tree-sitter-tsx.wasm`,
+                );
+                const tsxLang = await LanguageCls.load(tsxWasm);
+                this._languages.set("tsx", tsxLang);
+              } catch {
+                // TSX grammar not available; .tsx files will fall back to TS grammar
+              }
+            }
+          } catch {
+            // Grammar not available — this language will be skipped gracefully
+            console.debug?.(
+              `tree-sitter: Could not load grammar for ${config.id}, skipping structural analysis`,
+            );
+          }
+        };
+
+        loadPromises.push(loadGrammar());
+      }
+
+      await Promise.all(loadPromises);
+    } else {
+      // Legacy fallback: load TS/JS grammars directly
+      const tsWasm = require.resolve(
+        "tree-sitter-typescript/tree-sitter-typescript.wasm",
+      );
+      const tsxWasm = require.resolve(
+        "tree-sitter-typescript/tree-sitter-tsx.wasm",
+      );
+      const jsWasm = require.resolve(
+        "tree-sitter-javascript/tree-sitter-javascript.wasm",
+      );
+
+      const [tsLang, tsxLang, jsLang] = await Promise.all([
+        LanguageCls.load(tsWasm),
+        LanguageCls.load(tsxWasm),
+        LanguageCls.load(jsWasm),
+      ]);
+
+      this._languages.set("typescript", tsLang);
+      this._languages.set("tsx", tsxLang);
+      this._languages.set("javascript", jsLang);
+    }
+
     this._initialized = true;
   }
 
@@ -207,16 +293,18 @@ export class TreeSitterPlugin implements AnalyzerPlugin {
    * Create a parser set to the appropriate language for the given file.
    * This is synchronous because all languages are pre-loaded during init().
    */
-  private getParser(filePath: string): TreeSitterParser {
+  private getParser(filePath: string): TreeSitterParser | null {
     if (!this._initialized || !this._ParserClass) {
       throw new Error(
         "TreeSitterPlugin.init() must be called before use",
       );
     }
-    const langKey = languageKeyFromPath(filePath);
+    const langKey = this.languageKeyFromPath(filePath);
+    if (!langKey) return null;
     const lang = this._languages.get(langKey);
     if (!lang) {
-      throw new Error(`Language not loaded: ${langKey}`);
+      // Language grammar not loaded — graceful degradation
+      return null;
     }
     const parser = new this._ParserClass();
     parser.setLanguage(lang);
@@ -228,6 +316,10 @@ export class TreeSitterPlugin implements AnalyzerPlugin {
     content: string,
   ): StructuralAnalysis {
     const parser = this.getParser(filePath);
+    if (!parser) {
+      return { functions: [], classes: [], imports: [], exports: [] };
+    }
+
     const tree = parser.parse(content);
     if (!tree) {
       parser.delete();
@@ -290,6 +382,8 @@ export class TreeSitterPlugin implements AnalyzerPlugin {
     content: string,
   ): CallGraphEntry[] {
     const parser = this.getParser(filePath);
+    if (!parser) return [];
+
     const tree = parser.parse(content);
     if (!tree) {
       parser.delete();

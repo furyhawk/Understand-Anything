@@ -9,6 +9,261 @@ export const EdgeTypeSchema = z.enum([
   "related", "similar_to",                                      // Semantic
 ]);
 
+// Aliases that LLMs commonly generate instead of canonical node types
+export const NODE_TYPE_ALIASES: Record<string, string> = {
+  func: "function",
+  fn: "function",
+  method: "function",
+  interface: "class",
+  struct: "class",
+  mod: "module",
+  pkg: "module",
+  package: "module",
+};
+
+// Aliases that LLMs commonly generate instead of canonical edge types
+export const EDGE_TYPE_ALIASES: Record<string, string> = {
+  extends: "inherits",
+  invokes: "calls",
+  invoke: "calls",
+  uses: "depends_on",
+  requires: "depends_on",
+  relates_to: "related",
+  related_to: "related",
+  similar: "similar_to",
+  import: "imports",
+  export: "exports",
+  contain: "contains",
+  publish: "publishes",
+  subscribe: "subscribes",
+};
+
+// Aliases for complexity values LLMs commonly generate
+export const COMPLEXITY_ALIASES: Record<string, string> = {
+  low: "simple",
+  easy: "simple",
+  medium: "moderate",
+  intermediate: "moderate",
+  high: "complex",
+  hard: "complex",
+  difficult: "complex",
+};
+
+// Aliases for direction values LLMs commonly generate
+export const DIRECTION_ALIASES: Record<string, string> = {
+  to: "forward",
+  outbound: "forward",
+  from: "backward",
+  inbound: "backward",
+  both: "bidirectional",
+  mutual: "bidirectional",
+};
+
+export function sanitizeGraph(data: Record<string, unknown>): Record<string, unknown> {
+  const result = { ...data };
+
+  // Null → empty array for top-level collections
+  if (data.tour === null || data.tour === undefined) result.tour = [];
+  if (data.layers === null || data.layers === undefined) result.layers = [];
+
+  // Sanitize nodes
+  if (Array.isArray(data.nodes)) {
+    result.nodes = (data.nodes as Record<string, unknown>[]).map((node) => {
+      if (typeof node !== "object" || node === null) return node;
+      const n = { ...node };
+      // Null → undefined for optional fields
+      if (n.filePath === null) delete n.filePath;
+      if (n.lineRange === null) delete n.lineRange;
+      if (n.languageNotes === null) delete n.languageNotes;
+      // Lowercase enum-like strings
+      if (typeof n.type === "string") n.type = n.type.toLowerCase();
+      if (typeof n.complexity === "string") n.complexity = n.complexity.toLowerCase();
+      return n;
+    });
+  }
+
+  // Sanitize edges
+  if (Array.isArray(data.edges)) {
+    result.edges = (data.edges as Record<string, unknown>[]).map((edge) => {
+      if (typeof edge !== "object" || edge === null) return edge;
+      const e = { ...edge };
+      if (e.description === null) delete e.description;
+      if (typeof e.type === "string") e.type = e.type.toLowerCase();
+      if (typeof e.direction === "string") e.direction = e.direction.toLowerCase();
+      return e;
+    });
+  }
+
+  // Sanitize tour steps
+  if (Array.isArray(result.tour)) {
+    result.tour = (result.tour as Record<string, unknown>[]).map((step) => {
+      if (typeof step !== "object" || step === null) return step;
+      const s = { ...step };
+      if (s.languageLesson === null) delete s.languageLesson;
+      return s;
+    });
+  }
+
+  return result;
+}
+
+export function autoFixGraph(data: Record<string, unknown>): {
+  data: Record<string, unknown>;
+  issues: GraphIssue[];
+} {
+  const issues: GraphIssue[] = [];
+  const result = { ...data };
+
+  if (Array.isArray(data.nodes)) {
+    result.nodes = (data.nodes as Record<string, unknown>[]).map((node, i) => {
+      if (typeof node !== "object" || node === null) return node;
+      const n = { ...node };
+      const name = (n.name as string) || (n.id as string) || `index ${i}`;
+
+      // Missing or empty type
+      if (!n.type || typeof n.type !== "string") {
+        n.type = "file";
+        issues.push({
+          level: "auto-corrected",
+          category: "missing-field",
+          message: `nodes[${i}] ("${name}"): missing "type" — defaulted to "file"`,
+          path: `nodes[${i}].type`,
+        });
+      }
+
+      // Missing or empty complexity
+      if (!n.complexity || n.complexity === "") {
+        n.complexity = "moderate";
+        issues.push({
+          level: "auto-corrected",
+          category: "missing-field",
+          message: `nodes[${i}] ("${name}"): missing "complexity" — defaulted to "moderate"`,
+          path: `nodes[${i}].complexity`,
+        });
+      } else if (typeof n.complexity === "string" && n.complexity in COMPLEXITY_ALIASES) {
+        const original = n.complexity;
+        n.complexity = COMPLEXITY_ALIASES[n.complexity];
+        issues.push({
+          level: "auto-corrected",
+          category: "alias",
+          message: `nodes[${i}] ("${name}"): complexity "${original}" — mapped to "${n.complexity}"`,
+          path: `nodes[${i}].complexity`,
+        });
+      }
+
+      // Missing tags
+      if (!Array.isArray(n.tags)) {
+        n.tags = [];
+        issues.push({
+          level: "auto-corrected",
+          category: "missing-field",
+          message: `nodes[${i}] ("${name}"): missing "tags" — defaulted to []`,
+          path: `nodes[${i}].tags`,
+        });
+      }
+
+      // Missing summary
+      if (!n.summary || typeof n.summary !== "string") {
+        n.summary = (n.name as string) || "No summary";
+        issues.push({
+          level: "auto-corrected",
+          category: "missing-field",
+          message: `nodes[${i}] ("${name}"): missing "summary" — defaulted to name`,
+          path: `nodes[${i}].summary`,
+        });
+      }
+
+      return n;
+    });
+  }
+
+  if (Array.isArray(data.edges)) {
+    result.edges = (data.edges as Record<string, unknown>[]).map((edge, i) => {
+      if (typeof edge !== "object" || edge === null) return edge;
+      const e = { ...edge };
+
+      // Missing type
+      if (!e.type || typeof e.type !== "string") {
+        e.type = "depends_on";
+        issues.push({
+          level: "auto-corrected",
+          category: "missing-field",
+          message: `edges[${i}]: missing "type" — defaulted to "depends_on"`,
+          path: `edges[${i}].type`,
+        });
+      }
+
+      // Missing direction
+      if (!e.direction || typeof e.direction !== "string") {
+        e.direction = "forward";
+        issues.push({
+          level: "auto-corrected",
+          category: "missing-field",
+          message: `edges[${i}]: missing "direction" — defaulted to "forward"`,
+          path: `edges[${i}].direction`,
+        });
+      } else if (e.direction in DIRECTION_ALIASES) {
+        const original = e.direction;
+        e.direction = DIRECTION_ALIASES[e.direction as string];
+        issues.push({
+          level: "auto-corrected",
+          category: "alias",
+          message: `edges[${i}]: direction "${original}" — mapped to "${e.direction}"`,
+          path: `edges[${i}].direction`,
+        });
+      }
+
+      // Missing weight
+      if (e.weight === undefined || e.weight === null) {
+        e.weight = 0.5;
+        issues.push({
+          level: "auto-corrected",
+          category: "missing-field",
+          message: `edges[${i}]: missing "weight" — defaulted to 0.5`,
+          path: `edges[${i}].weight`,
+        });
+      } else if (typeof e.weight === "string") {
+        const parsed = parseFloat(e.weight as string);
+        if (!isNaN(parsed)) {
+          const original = e.weight;
+          e.weight = parsed;
+          issues.push({
+            level: "auto-corrected",
+            category: "type-coercion",
+            message: `edges[${i}]: weight was string "${original}" — coerced to number`,
+            path: `edges[${i}].weight`,
+          });
+        } else {
+          const original = e.weight;
+          e.weight = 0.5;
+          issues.push({
+            level: "auto-corrected",
+            category: "type-coercion",
+            message: `edges[${i}]: weight "${original}" is not a valid number — defaulted to 0.5`,
+            path: `edges[${i}].weight`,
+          });
+        }
+      }
+
+      // Clamp weight to [0, 1]
+      if (typeof e.weight === "number" && (e.weight < 0 || e.weight > 1)) {
+        const original = e.weight;
+        e.weight = Math.max(0, Math.min(1, e.weight));
+        issues.push({
+          level: "auto-corrected",
+          category: "out-of-range",
+          message: `edges[${i}]: weight ${original} clamped to ${e.weight}`,
+          path: `edges[${i}].weight`,
+        });
+      }
+
+      return e;
+    });
+  }
+
+  return { data: result, issues };
+}
+
 export const GraphNodeSchema = z.object({
   id: z.string(),
   type: z.enum(["file", "function", "class", "module", "concept"]),
@@ -63,23 +318,236 @@ export const KnowledgeGraphSchema = z.object({
   tour: z.array(TourStepSchema),
 });
 
+export interface GraphIssue {
+  level: "auto-corrected" | "dropped" | "fatal";
+  category: string;
+  message: string;
+  path?: string;
+}
+
 export interface ValidationResult {
   success: boolean;
   data?: z.infer<typeof KnowledgeGraphSchema>;
+  /** @deprecated Use issues/fatal instead */
   errors?: string[];
+  issues: GraphIssue[];
+  fatal?: string;
+}
+
+function buildInvalidCollectionIssue(name: string): GraphIssue {
+  return {
+    level: "fatal",
+    category: "invalid-collection",
+    message: `"${name}" must be an array when present`,
+    path: name,
+  };
+}
+
+function buildErrors(issues: GraphIssue[], fatal?: string): string[] | undefined {
+  const messages = issues.map((issue) => issue.message);
+  if (fatal && !messages.includes(fatal)) messages.unshift(fatal);
+  return messages.length > 0 ? messages : undefined;
+}
+
+export function normalizeGraph(data: unknown): unknown {
+  if (typeof data !== "object" || data === null) return data;
+
+  const d = data as Record<string, unknown>;
+  const result = { ...d };
+
+  if (Array.isArray(d.nodes)) {
+    result.nodes = (d.nodes as any[]).map((node) => {
+      if (
+        typeof node === "object" &&
+        node !== null &&
+        typeof node.type === "string" &&
+        node.type in NODE_TYPE_ALIASES
+      ) {
+        return { ...node, type: NODE_TYPE_ALIASES[node.type] };
+      }
+      return node;
+    });
+  }
+
+  if (Array.isArray(d.edges)) {
+    result.edges = (d.edges as any[]).map((edge) => {
+      if (
+        typeof edge === "object" &&
+        edge !== null &&
+        typeof edge.type === "string" &&
+        edge.type in EDGE_TYPE_ALIASES
+      ) {
+        return { ...edge, type: EDGE_TYPE_ALIASES[edge.type] };
+      }
+      return edge;
+    });
+  }
+
+  return result;
 }
 
 export function validateGraph(data: unknown): ValidationResult {
-  const result = KnowledgeGraphSchema.safeParse(data);
-
-  if (result.success) {
-    return { success: true, data: result.data };
+  // Tier 4: Fatal — not even an object
+  if (typeof data !== "object" || data === null) {
+    const fatal = "Invalid input: not an object";
+    return { success: false, issues: [], fatal, errors: buildErrors([], fatal) };
   }
 
-  const errors = result.error.issues.map((issue) => {
-    const path = issue.path.join(".");
-    return path ? `${path}: ${issue.message}` : issue.message;
-  });
+  const raw = data as Record<string, unknown>;
 
-  return { success: false, errors };
+  // Tier 1: Sanitize
+  const sanitized = sanitizeGraph(raw);
+
+  // Existing: Normalize type aliases
+  const normalized = normalizeGraph(sanitized) as Record<string, unknown>;
+
+  // Tier 2: Auto-fix defaults and coercion
+  const { data: fixed, issues } = autoFixGraph(normalized);
+
+  // Tier 4: Fatal — malformed top-level collections
+  const requiredCollections = ["nodes", "edges", "layers", "tour"] as const;
+  for (const collection of requiredCollections) {
+    if (collection in fixed && fixed[collection] !== undefined && !Array.isArray(fixed[collection])) {
+      const issue = buildInvalidCollectionIssue(collection);
+      issues.push(issue);
+      return {
+        success: false,
+        errors: buildErrors(issues, issue.message),
+        issues,
+        fatal: issue.message,
+      };
+    }
+  }
+
+  // Tier 4: Fatal — missing project metadata
+  const projectResult = ProjectMetaSchema.safeParse(fixed.project);
+  if (!projectResult.success) {
+    return {
+      success: false,
+      errors: buildErrors(issues, "Missing or invalid project metadata"),
+      issues,
+      fatal: "Missing or invalid project metadata",
+    };
+  }
+
+  // Tier 3: Validate nodes individually, drop broken
+  const validNodes: z.infer<typeof GraphNodeSchema>[] = [];
+  if (Array.isArray(fixed.nodes)) {
+    for (let i = 0; i < fixed.nodes.length; i++) {
+      const node = fixed.nodes[i] as Record<string, unknown>;
+      const result = GraphNodeSchema.safeParse(node);
+      if (result.success) {
+        validNodes.push(result.data);
+      } else {
+        const name = node?.name || node?.id || `index ${i}`;
+        issues.push({
+          level: "dropped",
+          category: "invalid-node",
+          message: `nodes[${i}] ("${name}"): ${result.error.issues[0]?.message ?? "validation failed"} — removed`,
+          path: `nodes[${i}]`,
+        });
+      }
+    }
+  }
+
+  // Tier 4: Fatal — no valid nodes
+  if (validNodes.length === 0) {
+    return {
+      success: false,
+      errors: buildErrors(issues, "No valid nodes found in knowledge graph"),
+      issues,
+      fatal: "No valid nodes found in knowledge graph",
+    };
+  }
+
+  // Tier 3: Validate edges + referential integrity
+  const nodeIds = new Set(validNodes.map((n) => n.id));
+  const validEdges: z.infer<typeof GraphEdgeSchema>[] = [];
+  if (Array.isArray(fixed.edges)) {
+    for (let i = 0; i < fixed.edges.length; i++) {
+      const edge = fixed.edges[i] as Record<string, unknown>;
+      const result = GraphEdgeSchema.safeParse(edge);
+      if (!result.success) {
+        issues.push({
+          level: "dropped",
+          category: "invalid-edge",
+          message: `edges[${i}]: ${result.error.issues[0]?.message ?? "validation failed"} — removed`,
+          path: `edges[${i}]`,
+        });
+        continue;
+      }
+      if (!nodeIds.has(result.data.source)) {
+        issues.push({
+          level: "dropped",
+          category: "invalid-reference",
+          message: `edges[${i}]: source "${result.data.source}" does not exist in nodes — removed`,
+          path: `edges[${i}].source`,
+        });
+        continue;
+      }
+      if (!nodeIds.has(result.data.target)) {
+        issues.push({
+          level: "dropped",
+          category: "invalid-reference",
+          message: `edges[${i}]: target "${result.data.target}" does not exist in nodes — removed`,
+          path: `edges[${i}].target`,
+        });
+        continue;
+      }
+      validEdges.push(result.data);
+    }
+  }
+
+  // Validate layers (drop broken, filter dangling nodeIds)
+  const validLayers: z.infer<typeof LayerSchema>[] = [];
+  if (Array.isArray(fixed.layers)) {
+    for (let i = 0; i < (fixed.layers as unknown[]).length; i++) {
+      const result = LayerSchema.safeParse((fixed.layers as unknown[])[i]);
+      if (result.success) {
+        validLayers.push({
+          ...result.data,
+          nodeIds: result.data.nodeIds.filter((id) => nodeIds.has(id)),
+        });
+      } else {
+        issues.push({
+          level: "dropped",
+          category: "invalid-layer",
+          message: `layers[${i}]: ${result.error.issues[0]?.message ?? "validation failed"} — removed`,
+          path: `layers[${i}]`,
+        });
+      }
+    }
+  }
+
+  // Validate tour steps (drop broken, filter dangling nodeIds)
+  const validTour: z.infer<typeof TourStepSchema>[] = [];
+  if (Array.isArray(fixed.tour)) {
+    for (let i = 0; i < (fixed.tour as unknown[]).length; i++) {
+      const result = TourStepSchema.safeParse((fixed.tour as unknown[])[i]);
+      if (result.success) {
+        validTour.push({
+          ...result.data,
+          nodeIds: result.data.nodeIds.filter((id) => nodeIds.has(id)),
+        });
+      } else {
+        issues.push({
+          level: "dropped",
+          category: "invalid-tour-step",
+          message: `tour[${i}]: ${result.error.issues[0]?.message ?? "validation failed"} — removed`,
+          path: `tour[${i}]`,
+        });
+      }
+    }
+  }
+
+  const graph = {
+    version: typeof fixed.version === "string" ? fixed.version : "1.0.0",
+    project: projectResult.data,
+    nodes: validNodes,
+    edges: validEdges,
+    layers: validLayers,
+    tour: validTour,
+  };
+
+  return { success: true, data: graph, issues, errors: buildErrors(issues) };
 }

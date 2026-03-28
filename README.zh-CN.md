@@ -4,7 +4,7 @@
 </p>
 
 <p align="center">
-  <a href="README.md">English</a> | <a href="README.zh-CN.md">中文</a> | <a href="README.ja-JP.md">日本語</a>
+  <a href="README.md">English</a> | <a href="README.zh-CN.md">中文</a> | <a href="README.ja-JP.md">日本語</a> | <a href="README.tr-TR.md">Türkçe</a>
 </p>
 
 <p align="center">
@@ -144,6 +144,20 @@ Fetch and follow instructions from https://raw.githubusercontent.com/Lum1104/Und
 Fetch and follow instructions from https://raw.githubusercontent.com/Lum1104/Understand-Anything/refs/heads/main/.antigravity/INSTALL.md
 ```
 
+### Gemini CLI
+
+告诉 Gemini CLI:
+```text
+Fetch and follow instructions from https://raw.githubusercontent.com/Lum1104/Understand-Anything/refs/heads/main/.gemini/INSTALL.md
+```
+
+### Pi Agent
+
+告诉 Pi Agent:
+```text
+Fetch and follow instructions from https://raw.githubusercontent.com/Lum1104/Understand-Anything/refs/heads/main/.pi/INSTALL.md
+```
+
 ### 多平台兼容
 
 | 平台 | 状态 | 安装方式 |
@@ -154,6 +168,8 @@ Fetch and follow instructions from https://raw.githubusercontent.com/Lum1104/Und
 | OpenClaw | ✅ 支持 | AI驱动安装 |
 | Cursor | ✅ 支持 | 自动发现 |
 | Antigravity | ✅ 支持 | AI驱动安装 |
+| Gemini CLI | ✅ 支持 | AI驱动安装 |
+| Pi Agent | ✅ 支持 | AI驱动安装 |
 
 ---
 

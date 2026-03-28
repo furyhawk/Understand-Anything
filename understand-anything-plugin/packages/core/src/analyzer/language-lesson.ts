@@ -1,11 +1,16 @@
 import type { GraphNode, GraphEdge } from "../types.js";
+import type { LanguageConfig } from "../languages/types.js";
 
 export interface LanguageLessonResult {
   languageNotes: string;
   concepts: Array<{ name: string; explanation: string }>;
 }
 
-const CONCEPT_PATTERNS: Record<string, string[]> = {
+/**
+ * Base concept patterns that apply across all languages.
+ * These are merged with language-specific concepts from LanguageConfig.
+ */
+const BASE_CONCEPT_PATTERNS: Record<string, string[]> = {
   "async/await": ["async", "await", "promise", "asynchronous"],
   "middleware pattern": ["middleware", "interceptor", "pipe"],
   "generics": ["generic", "type parameter", "template"],
@@ -37,11 +42,34 @@ const CONCEPT_PATTERNS: Record<string, string[]> = {
 };
 
 /**
+ * Build the full concept patterns map by merging base patterns with
+ * language-specific concepts from a LanguageConfig (if provided).
+ */
+function buildConceptPatterns(
+  langConfig?: LanguageConfig | null,
+): Record<string, string[]> {
+  const patterns = { ...BASE_CONCEPT_PATTERNS };
+
+  if (langConfig?.concepts) {
+    for (const concept of langConfig.concepts) {
+      if (!patterns[concept]) {
+        // Use the concept name itself as a keyword for detection
+        patterns[concept] = [concept.toLowerCase()];
+      }
+    }
+  }
+
+  return patterns;
+}
+
+/**
  * Detects language concepts present in a graph node based on its tags, summary, and languageNotes.
+ * When a LanguageConfig is provided, language-specific concepts are also detected.
  */
 export function detectLanguageConcepts(
   node: GraphNode,
   language: string,
+  langConfig?: LanguageConfig | null,
 ): string[] {
   const text = [
     ...node.tags,
@@ -49,9 +77,10 @@ export function detectLanguageConcepts(
     node.languageNotes?.toLowerCase() ?? "",
   ].join(" ");
 
+  const patterns = buildConceptPatterns(langConfig);
   const detected: string[] = [];
 
-  for (const [concept, keywords] of Object.entries(CONCEPT_PATTERNS)) {
+  for (const [concept, keywords] of Object.entries(patterns)) {
     const found = keywords.some((keyword) =>
       text.toLowerCase().includes(keyword.toLowerCase()),
     );
@@ -63,11 +92,19 @@ export function detectLanguageConcepts(
   return detected;
 }
 
-const LANGUAGE_DISPLAY_NAMES: Record<string, string> = {
-  typescript: "TypeScript",
-  javascript: "JavaScript",
-  coffeescript: "CoffeeScript",
-};
+/**
+ * Get the display name for a language.
+ * Uses LanguageConfig if provided, otherwise falls back to capitalization.
+ */
+export function getLanguageDisplayName(
+  language: string,
+  langConfig?: LanguageConfig | null,
+): string {
+  if (langConfig?.displayName) {
+    return langConfig.displayName;
+  }
+  return language.charAt(0).toUpperCase() + language.slice(1);
+}
 
 /**
  * Builds a prompt that asks an LLM to produce a language-specific lesson for a given node.
@@ -76,12 +113,11 @@ export function buildLanguageLessonPrompt(
   node: GraphNode,
   edges: GraphEdge[],
   language: string,
+  langConfig?: LanguageConfig | null,
 ): string {
-  const capitalizedLanguage =
-    LANGUAGE_DISPLAY_NAMES[language.toLowerCase()] ??
-    language.charAt(0).toUpperCase() + language.slice(1);
+  const capitalizedLanguage = getLanguageDisplayName(language, langConfig);
 
-  const concepts = detectLanguageConcepts(node, language);
+  const concepts = detectLanguageConcepts(node, language, langConfig);
 
   const relationships = edges
     .map((edge) => {

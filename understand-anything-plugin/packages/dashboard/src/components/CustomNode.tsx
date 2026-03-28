@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Handle, Position } from "@xyflow/react";
 import type { NodeProps, Node } from "@xyflow/react";
 
@@ -19,7 +20,7 @@ const typeTextColors: Record<string, string> = {
 
 const complexityColors: Record<string, string> = {
   simple: "text-node-function",
-  moderate: "text-gold-dim",
+  moderate: "text-accent-dim",
   complex: "text-[#c97070]",
 };
 
@@ -40,7 +41,7 @@ export interface CustomNodeData extends Record<string, unknown> {
 
 export type CustomFlowNode = Node<CustomNodeData, "custom">;
 
-export default function CustomNode({
+function CustomNodeComponent({
   id,
   data,
 }: NodeProps<CustomFlowNode>) {
@@ -50,17 +51,17 @@ export default function CustomNode({
 
   let extraClass = "";
   if (data.isSelected) {
-    extraClass = "ring-2 ring-gold node-glow";
+    extraClass = "ring-2 ring-accent node-glow";
   } else if (data.isTourHighlighted) {
-    extraClass = "ring-2 ring-gold-dim animate-gold-pulse";
+    extraClass = "ring-2 ring-accent-dim animate-accent-pulse";
   } else if (data.isHighlighted) {
     const score = data.searchScore ?? 1;
     if (score <= 0.1) {
-      extraClass = "ring-2 ring-gold-bright";
+      extraClass = "ring-2 ring-accent-bright";
     } else if (score <= 0.3) {
-      extraClass = "ring-2 ring-gold";
+      extraClass = "ring-2 ring-accent";
     } else {
-      extraClass = "ring-1 ring-gold-dim/60";
+      extraClass = "ring-1 ring-accent-dim/60";
     }
   }
 
@@ -79,8 +80,7 @@ export default function CustomNode({
 
   return (
     <div
-      className={`relative rounded-lg bg-elevated border border-border-subtle ${extraClass} min-w-[180px] max-w-[220px] overflow-hidden transition-all duration-200 cursor-pointer`}
-      style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}
+      className={`relative rounded-lg bg-elevated border border-border-subtle ${extraClass} min-w-[180px] max-w-[220px] overflow-hidden transition-[box-shadow,outline,opacity,filter] duration-200 cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.3)]`}
       onClick={() => data.onNodeClick?.(id)}
     >
       {/* Left color bar */}
@@ -122,3 +122,6 @@ export default function CustomNode({
     </div>
   );
 }
+
+const CustomNode = memo(CustomNodeComponent);
+export default CustomNode;

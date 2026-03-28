@@ -5,9 +5,10 @@ import {
   detectLanguageConcepts,
 } from "../analyzer/language-lesson.js";
 import type { GraphNode, GraphEdge } from "../types.js";
+import { typescriptConfig } from "../languages/configs/typescript.js";
 
 const sampleNode: GraphNode = {
-  id: "func:auth:verifyToken",
+  id: "function:auth:verifyToken",
   type: "function",
   name: "verifyToken",
   filePath: "src/auth/verify.ts",
@@ -19,7 +20,7 @@ const sampleNode: GraphNode = {
 
 const sampleEdges: GraphEdge[] = [
   {
-    source: "func:auth:verifyToken",
+    source: "function:auth:verifyToken",
     target: "file:src/config.ts",
     type: "reads_from",
     direction: "forward",
@@ -27,7 +28,7 @@ const sampleEdges: GraphEdge[] = [
   },
   {
     source: "file:src/middleware.ts",
-    target: "func:auth:verifyToken",
+    target: "function:auth:verifyToken",
     type: "calls",
     direction: "forward",
     weight: 0.8,
@@ -51,6 +52,7 @@ describe("language-lesson", () => {
         sampleNode,
         sampleEdges,
         "typescript",
+        typescriptConfig,
       );
       expect(prompt).toContain("TypeScript");
     });
@@ -126,7 +128,7 @@ describe("language-lesson", () => {
 
     it("detects middleware pattern", () => {
       const middlewareNode: GraphNode = {
-        id: "func:middleware:auth",
+        id: "function:middleware:auth",
         type: "function",
         name: "authMiddleware",
         filePath: "src/middleware/auth.ts",

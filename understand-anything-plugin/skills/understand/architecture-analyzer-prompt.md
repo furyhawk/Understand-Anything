@@ -82,11 +82,36 @@ Classify each directory name against known architectural patterns:
 | `hooks` | `hooks` |
 | `store`, `state`, `reducers`, `actions`, `slices` | `state` |
 | `assets`, `static`, `public` | `assets` |
+| `migrations` | `data` |
+| `management`, `commands` | `config` |
+| `templatetags` | `utility` |
+| `signals` | `service` |
+| `serializers` | `api` |
+| `cmd` | `entry` |
+| `internal` | `service` |
+| `pkg` | `utility` |
+| `src/main/java` | `service` |
+| `src/test/java` | `test` |
+| `dto`, `request`, `response` | `types` |
+| `entity` | `data` |
+| `controller` | `api` |
+| `routers` | `api` |
+| `composables` | `service` |
+| `blueprints` | `api` |
+| `mailers`, `jobs`, `channels` | `service` |
+| `bin` | `entry` |
 
 Also check file-level patterns:
-- Files matching `*.test.*` or `*.spec.*` -> `test`
-- Files matching `*.d.ts` -> `types`
-- Files named `index.ts`/`index.js` at a package root -> `entry`
+- Files matching `*.test.*` or `*.spec.*` or `test_*.py` or `*_test.go` or `*Test.java` or `*_spec.rb` or `*Test.php` or `*Tests.cs` -> `test`
+- Files matching `*.d.ts` -> `types` (TypeScript declaration files only)
+- Files named `index.ts`, `index.js`, or `__init__.py` at a package/directory root -> `entry`
+- Files named `manage.py` at the project root -> `entry` (Django management entry point)
+- Files named `wsgi.py` or `asgi.py` -> `config` (Python WSGI/ASGI server config)
+- Files named `main.go` at `cmd/*/` -> `entry` (Go binary entry points)
+- Files named `main.rs` or `lib.rs` at `src/` -> `entry` (Rust crate roots)
+- Files named `Application.java` or `Program.cs` -> `entry` (JVM / .NET entry points)
+- Files named `config.ru` -> `entry` (Ruby Rack entry point)
+- Files named `Cargo.toml`, `go.mod`, `Gemfile`, `pom.xml`, `build.gradle`, `composer.json` -> `config` (language-level project config)
 
 **F. Dependency Direction**
 
@@ -139,7 +164,7 @@ For each pair of groups with imports between them, determine the dominant direct
 Before writing the script, create its input JSON file:
 
 ```bash
-cat > /tmp/ua-arch-input.json << 'ENDJSON'
+cat > $PROJECT_ROOT/.understand-anything/tmp/ua-arch-input.json << 'ENDJSON'
 {
   "fileNodes": [<file nodes from prompt>],
   "importEdges": [<import edges from prompt>]
@@ -152,7 +177,7 @@ ENDJSON
 After writing the script, execute it:
 
 ```bash
-node /tmp/ua-arch-analyze.js /tmp/ua-arch-input.json /tmp/ua-arch-results.json
+node $PROJECT_ROOT/.understand-anything/tmp/ua-arch-analyze.js $PROJECT_ROOT/.understand-anything/tmp/ua-arch-input.json $PROJECT_ROOT/.understand-anything/tmp/ua-arch-results.json
 ```
 
 If the script exits with a non-zero code, read stderr, diagnose the issue, fix the script, and re-run. You have up to 2 retry attempts.
@@ -161,7 +186,7 @@ If the script exits with a non-zero code, read stderr, diagnose the issue, fix t
 
 ## Phase 2 -- Semantic Layer Assignment
 
-After the script completes, read `/tmp/ua-arch-results.json`. Use the structural analysis as the primary input for your layer decisions. Do NOT re-read source files or re-analyze imports -- trust the script's results entirely.
+After the script completes, read `$PROJECT_ROOT/.understand-anything/tmp/ua-arch-results.json`. Use the structural analysis as the primary input for your layer decisions. Do NOT re-read source files or re-analyze imports -- trust the script's results entirely.
 
 ### Step 1 -- Evaluate Directory Groups as Layer Candidates
 

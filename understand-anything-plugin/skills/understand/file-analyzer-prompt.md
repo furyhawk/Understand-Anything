@@ -12,7 +12,7 @@ For each file in the batch provided to you, extract structural data via a script
 
 ## Phase 1 -- Structural Extraction Script
 
-Write a script that reads each source file in your batch and extracts deterministic structural information. Choose the best language for this task -- Node.js is recommended for TypeScript/JavaScript projects, Python for Python projects, bash with grep for simpler cases.
+Write a script that reads each source file in your batch and extracts deterministic structural information. Choose the best language for this task based on what's available on the system and what the project uses -- Node.js, Python, or bash with grep are all valid choices.
 
 ### Script Requirements
 
@@ -20,11 +20,14 @@ Write a script that reads each source file in your batch and extracts determinis
    ```json
    {
      "projectRoot": "/path/to/project",
-     "allProjectFiles": ["src/index.ts", "src/utils.ts", "..."],
      "batchFiles": [
        {"path": "src/index.ts", "language": "typescript", "sizeLines": 150},
        {"path": "src/utils.ts", "language": "typescript", "sizeLines": 80}
-     ]
+     ],
+     "batchImportData": {
+       "src/index.ts": ["src/utils.ts", "src/config.ts"],
+       "src/utils.ts": []
+     }
    }
    ```
 2. **Write** results JSON to the path given as the second argument.
@@ -45,10 +48,9 @@ For each file in `batchFiles`, read the file content and extract:
 - Detection approach: match `class <name>`, `interface <name>`, `type <name> =`, `struct <name>`, `trait <name>`, `impl <name>` as appropriate
 
 **Imports:**
-- Source module path (exactly as written in the import statement)
-- Imported specifiers (named imports, default import, namespace import)
-- Line number
-- For relative imports (starting with `./` or `../`), compute the resolved path relative to project root. Cross-reference against `allProjectFiles` to confirm the resolved path exists. Mark unresolvable imports.
+- Do NOT extract imports in the script. Import resolution has already been performed by the project scanner.
+- The pre-resolved imports for each file are provided in `batchImportData` in the input JSON.
+- Do not include an `imports` field in the script output — import edges will be created in Phase 2 using `batchImportData` directly.
 
 **Exports:**
 - Exported names and their line numbers
@@ -57,7 +59,7 @@ For each file in `batchFiles`, read the file content and extract:
 **Basic Metrics:**
 - Total line count
 - Non-empty line count (lines that are not blank or comment-only)
-- Import count (number of import statements)
+- Import count — use `batchImportData[file.path].length` from the input JSON (do not count from source)
 - Export count (number of export statements)
 - Function count, class count
 
@@ -81,10 +83,6 @@ The script must write this exact JSON structure to the output file:
       ],
       "classes": [
         {"name": "App", "startLine": 50, "endLine": 140, "methods": ["init", "run"], "properties": ["config", "logger"]}
-      ],
-      "imports": [
-        {"source": "./utils", "resolvedPath": "src/utils.ts", "specifiers": ["formatDate", "sanitize"], "line": 1, "isExternal": false},
-        {"source": "express", "resolvedPath": null, "specifiers": ["default"], "line": 2, "isExternal": true}
       ],
       "exports": [
         {"name": "App", "line": 50, "isDefault": true},
@@ -111,11 +109,11 @@ The script must write this exact JSON structure to the output file:
 Before writing the script, create its input JSON file. **IMPORTANT:** Use the batch index in ALL temp file paths to avoid collisions when multiple file-analyzer agents run concurrently.
 
 ```bash
-cat > /tmp/ua-file-analyzer-input-<batchIndex>.json << 'ENDJSON'
+cat > $PROJECT_ROOT/.understand-anything/tmp/ua-file-analyzer-input-<batchIndex>.json << 'ENDJSON'
 {
   "projectRoot": "<project-root>",
-  "allProjectFiles": [<full file list from scan>],
-  "batchFiles": [<this batch's files>]
+  "batchFiles": [<this batch's files>],
+  "batchImportData": <batchImportData JSON object — provided in your dispatch prompt>
 }
 ENDJSON
 ```
@@ -125,7 +123,10 @@ ENDJSON
 After writing the script, execute it. **Use the batch index in every temp file path** — multiple file-analyzer agents run in parallel and must not overwrite each other's files:
 
 ```bash
-node /tmp/ua-file-extract-<batchIndex>.js /tmp/ua-file-analyzer-input-<batchIndex>.json /tmp/ua-file-extract-results-<batchIndex>.json
+# For Node.js scripts:
+node $PROJECT_ROOT/.understand-anything/tmp/ua-file-extract-<batchIndex>.js $PROJECT_ROOT/.understand-anything/tmp/ua-file-analyzer-input-<batchIndex>.json $PROJECT_ROOT/.understand-anything/tmp/ua-file-extract-results-<batchIndex>.json
+# For Python scripts:
+python3 $PROJECT_ROOT/.understand-anything/tmp/ua-file-extract-<batchIndex>.py $PROJECT_ROOT/.understand-anything/tmp/ua-file-analyzer-input-<batchIndex>.json $PROJECT_ROOT/.understand-anything/tmp/ua-file-extract-results-<batchIndex>.json
 ```
 
 If the script exits with a non-zero code, read stderr, diagnose the issue, fix the script, and re-run. You have up to 2 retry attempts.
@@ -134,7 +135,7 @@ If the script exits with a non-zero code, read stderr, diagnose the issue, fix t
 
 ## Phase 2 -- Semantic Analysis
 
-After the script completes, read `/tmp/ua-file-extract-results-<batchIndex>.json`. Use these structured results as the foundation for your analysis. Do NOT re-read the source files unless the script skipped a file or you need to understand a specific code pattern that the script could not capture.
+After the script completes, read `$PROJECT_ROOT/.understand-anything/tmp/ua-file-extract-results-<batchIndex>.json`. Use these structured results as the foundation for your analysis. Do NOT re-read the source files unless the script skipped a file or you need to understand a specific code pattern that the script could not capture.
 
 For each file in the script's `results` array, produce `GraphNode` and `GraphEdge` objects by combining the script's structural data with your expert judgment.
 
@@ -166,14 +167,22 @@ Indicators from script data:
 - Filename contains `.test.` or `.spec.` = `test`
 - Exports a class with `Handler` or `Controller` in the name = `api-handler`
 - Only type/interface exports = `type-definition`
-- Named `index.ts` at a directory root with re-exports = `entry-point`
+- Named `index.ts` or `index.js` at a directory root with re-exports = `entry-point` (JavaScript/TypeScript barrel)
+- Named `__init__.py` at a package root with imports or re-exports = `entry-point` (Python package barrel)
+- Named `manage.py` = `entry-point` (Django management script)
+- Named `main.go` in `cmd/` directory = `entry-point` (Go binary)
+- Named `main.rs` or `lib.rs` in `src/` = `entry-point` (Rust crate root)
+- Named `Application.java` or `Main.java` = `entry-point` (Java application)
+- Named `Program.cs` = `entry-point` (.NET application)
+- Named `config.ru` = `entry-point` (Ruby Rack server)
+- Named `mod.rs` in a directory = `barrel` (Rust module barrel)
 
 **Language Notes** (optional, your expert judgment):
 If the structural data reveals notable language-specific patterns (e.g., many generic type parameters, decorator usage, complex trait bounds), add a brief `languageNotes` string. Only add this when genuinely educational.
 
 ### Step 2 -- Create Function and Class Nodes
 
-For significant functions and classes from the script output, create `func:` and `class:` nodes.
+For significant functions and classes from the script output, create `function:` and `class:` nodes.
 
 **Significance filter** -- only create nodes for:
 - Functions/methods with 10+ lines (skip trivial one-liners)
@@ -191,7 +200,7 @@ Using the script's import, export, and structural data, create edges:
 | Edge Type | When to Create | Weight | Direction |
 |---|---|---|---|
 | `contains` | File contains a function or class node you created | `1.0` | `forward` |
-| `imports` | File imports from another project file (use `resolvedPath` from script, skip external imports where `isExternal: true`) | `0.7` | `forward` |
+| `imports` | File imports from another project file (use `batchImportData[filePath]` from input JSON — external imports already filtered out) | `0.7` | `forward` |
 | `calls` | A function in this file calls a function in another file (infer from imports + function names when confident) | `0.8` | `forward` |
 | `inherits` | A class extends another class in the project | `0.9` | `forward` |
 | `implements` | A class implements an interface in the project | `0.9` | `forward` |
@@ -199,7 +208,7 @@ Using the script's import, export, and structural data, create edges:
 | `depends_on` | File has runtime dependency on another project file (broader than imports -- includes dynamic requires, lazy loads) | `0.6` | `forward` |
 | `tested_by` | Source file is tested by a test file (infer from test file imports and naming conventions) | `0.5` | `forward` |
 
-**Import edge creation rule:** For each import in the script output where `isExternal` is `false` and `resolvedPath` is non-null, create an `imports` edge from the current file node to `file:<resolvedPath>`. Do NOT create edges for external package imports.
+**Import edge creation rule:** For each resolved path in `batchImportData[filePath]` (provided in the input JSON), create an `imports` edge from the current file node to `file:<resolvedPath>`. The `batchImportData` values contain only resolved project-internal paths — external packages have already been filtered out. Do NOT attempt to re-resolve imports from source.
 
 Do NOT use edge types not listed in this table.
 
@@ -210,10 +219,10 @@ You MUST use these exact prefixes for node IDs:
 | Node Type | ID Format | Example |
 |---|---|---|
 | File | `file:<relative-path>` | `file:src/index.ts` |
-| Function | `func:<relative-path>:<function-name>` | `func:src/utils.ts:formatDate` |
+| Function | `function:<relative-path>:<function-name>` | `function:src/utils.ts:formatDate` |
 | Class | `class:<relative-path>:<class-name>` | `class:src/models/User.ts:User` |
 
-**Scope restriction:** Only produce `file:`, `func:`, and `class:` nodes. The `module:` and `concept:` node types are reserved for higher-level analysis and MUST NOT be created by this agent.
+**Scope restriction:** Only produce `file:`, `function:`, and `class:` nodes. The `module:` and `concept:` node types are reserved for higher-level analysis and MUST NOT be created by this agent.
 
 ## Output Format
 
@@ -233,7 +242,7 @@ Produce a single, valid JSON block. Validate it mentally before writing -- malfo
       "languageNotes": "TypeScript barrel file using re-exports."
     },
     {
-      "id": "func:src/utils.ts:formatDate",
+      "id": "function:src/utils.ts:formatDate",
       "type": "function",
       "name": "formatDate",
       "filePath": "src/utils.ts",
@@ -253,7 +262,7 @@ Produce a single, valid JSON block. Validate it mentally before writing -- malfo
     },
     {
       "source": "file:src/utils.ts",
-      "target": "func:src/utils.ts:formatDate",
+      "target": "function:src/utils.ts:formatDate",
       "type": "contains",
       "direction": "forward",
       "weight": 1.0
@@ -284,13 +293,42 @@ Produce a single, valid JSON block. Validate it mentally before writing -- malfo
 - `direction` (string) -- always `forward`
 - `weight` (number) -- must match the weight specified in the edge type table
 
+## Language and Framework Quick Reference
+
+Use these hints to improve tag and edge accuracy for common patterns. Your training knowledge covers these — this is a fast lookup for the most impactful signals.
+
+**Tag signals:**
+
+| Signal | Tags to apply |
+|---|---|
+| File in `hooks/`, exports a function starting with `use` | `hook`, `service` |
+| File in `contexts/` or `context/`, exports a Provider component | `service`, `state` |
+| File in `pages/` or `views/` | `ui`, `routing` |
+| File in `store/`, `slices/`, `reducers/`, `state/` | `state` |
+| File in `services/`, `api/`, `client/` | `service` |
+| `__init__.py` at a package root with re-exports | `entry-point`, `barrel` |
+| `manage.py` at the project root | `entry-point` |
+| `mod.rs` in a directory | `barrel` |
+| `main.go` in a `cmd/` subdirectory | `entry-point` |
+
+**Edge signals:**
+
+| Pattern | Edge to create |
+|---|---|
+| React component renders another component in its JSX | `contains` from parent to child |
+| Component/hook calls a custom hook (`useX`) | `depends_on` from consumer to hook file |
+| Context provider wraps components | `exports` from provider to context definition |
+| Component calls `useContext` or custom context hook | `depends_on` from consumer to context definition |
+| Python file uses `from x import y` where x is a project file | `imports` edge (same rule as JS/TS) |
+| Go file `import`s an internal package path | `imports` edge to the resolved file |
+
 ## Critical Constraints
 
-- NEVER invent file paths. Every `filePath` and every file reference in node IDs must correspond to a real file from the script's output or the project file list provided to you.
-- NEVER create edges to nodes that do not exist. If an import target is external (`isExternal: true` in script output), do NOT create an edge for it.
+- NEVER invent file paths. Every `filePath` and every file reference in node IDs must correspond to a real file from the script's output, `batchFiles`, or `batchImportData`.
+- NEVER create edges to nodes that do not exist. Only create import edges for paths listed in `batchImportData` — these are already verified project-internal paths.
 - ALWAYS create a `file:` node for EVERY file in your batch, even if the file is trivial.
-- Only create `func:` and `class:` nodes for significant code elements (see significance filter above).
-- For import edges, use the script's `resolvedPath` field directly. Do NOT attempt to resolve import paths yourself -- the script already did this deterministically.
+- Only create `function:` and `class:` nodes for significant code elements (see significance filter above).
+- For import edges, use `batchImportData[filePath]` directly from the input JSON. Do NOT attempt to resolve import paths yourself -- the project scanner already did this deterministically.
 - NEVER produce duplicate node IDs within your batch.
 - NEVER create self-referencing edges (where source equals target).
 - Trust the script's structural extraction. Do NOT re-read source files to re-extract functions, classes, or imports that the script already captured. Only re-read a file if you need deeper understanding for writing a summary.
