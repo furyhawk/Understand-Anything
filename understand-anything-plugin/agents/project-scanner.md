@@ -20,7 +20,7 @@ Scan the project directory provided in the prompt and produce a JSON inventory. 
 
 ## Phase 1 -- Discovery Script
 
-Write a script that discovers all project files (including non-code files like configs, docs, and infrastructure), detects languages and frameworks, counts lines, and produces structured JSON. Choose the best language for this task (bash, Node.js, or Python -- whichever is available on the system). The script must handle errors gracefully and never crash on unexpected input.
+Write a script that discovers all project files (including non-code files like configs, docs, and infrastructure), detects languages and frameworks, counts lines, and produces structured JSON. Prefer Node.js for the script; fall back to Python if Node.js is unavailable. Avoid bash for this task — import resolution requires file reading and path manipulation that bash handles poorly. The script must handle errors gracefully and never crash on unexpected input.
 
 ### Script Requirements
 
@@ -41,16 +41,16 @@ Discover all tracked files. In order of preference:
 
 Remove ALL files matching these patterns:
 - **Dependency directories:** paths containing `node_modules/`, `.git/`, `vendor/`, `venv/`, `.venv/`, `__pycache__/`
-- **Build output:** paths containing `dist/`, `build/`, `out/`, `coverage/`, `.next/`, `.cache/`, `.turbo/`, `target/` (Rust)
+- **Build output:** paths with a directory segment matching `dist/`, `build/`, `out/`, `coverage/`, `.next/`, `.cache/`, `.turbo/`, `target/` (Rust) — match full directory segments only, not substrings (e.g., `buildSrc/` should NOT be excluded)
 - **Lock files:** `*.lock`, `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`
 - **Binary/asset files:** `.png`, `.jpg`, `.jpeg`, `.gif`, `.svg`, `.ico`, `.woff`, `.woff2`, `.ttf`, `.eot`, `.mp3`, `.mp4`, `.pdf`, `.zip`, `.tar`, `.gz`
-- **Generated files:** `*.min.js`, `*.min.css`, `*.map`, `*.d.ts`, `*.generated.*`
+- **Generated files:** `*.min.js`, `*.min.css`, `*.map`, `*.generated.*` (note: do NOT exclude `*.d.ts` — many projects have hand-written declaration files)
 - **IDE/editor config:** paths containing `.idea/`, `.vscode/`
 - **Misc non-source:** `LICENSE`, `.gitignore`, `.editorconfig`, `.prettierrc`, `.eslintrc*`, `*.log`
 
 **IMPORTANT:** Do NOT exclude non-code project files. The following MUST be kept:
 - Documentation: `*.md`, `*.rst`, `*.txt` (except `LICENSE`)
-- Configuration: `*.yaml`, `*.yml`, `*.json`, `*.toml`, `*.xml`, `*.cfg`, `*.ini`, `*.env`, `*.env.example`
+- Configuration: `*.yaml`, `*.yml`, `*.json`, `*.toml`, `*.xml`, `*.cfg`, `*.ini`, `*.env`, `*.env.example` (include `.env` in the file list but downstream agents should NEVER include `.env` variable values in summaries or output)
 - Infrastructure: `Dockerfile`, `docker-compose.*`, `*.tf`, `Makefile`, `Jenkinsfile`, `Procfile`, `Vagrantfile`
 - CI/CD: `.github/workflows/*`, `.gitlab-ci.yml`, `.circleci/*`, `Jenkinsfile`
 - Data/Schema: `*.sql`, `*.graphql`, `*.gql`, `*.proto`, `*.prisma`, `*.schema.json`
@@ -244,13 +244,13 @@ The script must write this exact JSON structure to the output file:
 
 ### Executing the Script
 
-After writing the script, execute it:
+After writing the script, execute it. `$PROJECT_ROOT` is the project root directory provided in your dispatch prompt:
 
 ```bash
-node $PROJECT_ROOT/.understand-anything/tmp/ua-project-scan.js "<project-root>" "$PROJECT_ROOT/.understand-anything/tmp/ua-scan-results.json"
+node $PROJECT_ROOT/.understand-anything/tmp/ua-project-scan.js "$PROJECT_ROOT" "$PROJECT_ROOT/.understand-anything/tmp/ua-scan-results.json"
 ```
 
-(Or the equivalent for bash/Python, depending on which language you chose.)
+(Or the equivalent for Python, depending on which language you chose.)
 
 If the script exits with a non-zero code, read stderr, diagnose the issue, fix the script, and re-run. You have up to 2 retry attempts.
 

@@ -20,7 +20,7 @@ Given a codebase's nodes, edges, and layers, design a guided tour that teaches t
 
 ## Phase 1 -- Graph Topology Script
 
-Write a Node.js script that analyzes the graph's topology to surface structural signals useful for tour design: entry points, dependency chains, importance rankings, and clusters.
+Write a script (prefer Node.js; fall back to Python if unavailable) that analyzes the graph's topology to surface structural signals useful for tour design: entry points, dependency chains, importance rankings, and clusters.
 
 ### Script Requirements
 
@@ -75,7 +75,7 @@ Output the top 5 candidates sorted by score descending.
 
 **D. Dependency Chains (BFS from Entry Points)**
 
-Starting from the top entry point candidate, perform a BFS traversal following `imports` and `calls` edges (forward direction only). Record the traversal order and depth of each node reached. This reveals the natural "reading order" of the codebase -- what you encounter as you follow the dependency graph outward from the entry point.
+Starting from the **top code entry point** candidate (skip documentation nodes like README for BFS — they have no `imports` edges and would produce an empty traversal), perform a BFS traversal following `imports` and `calls` edges (forward direction only). Record the traversal order and depth of each node reached. This reveals the natural "reading order" of the codebase -- what you encounter as you follow the dependency graph outward from the entry point.
 
 Output:
 - The BFS traversal order (list of node IDs in visit order)

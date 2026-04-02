@@ -20,7 +20,7 @@ Given a list of file nodes (with paths, summaries, tags, and node types) and imp
 
 ## Phase 1 -- Structural Analysis Script
 
-Write a Node.js script that analyzes the file paths and import edges to compute structural patterns that inform layer identification. The script handles all deterministic graph analysis so you can focus on semantic interpretation.
+Write a script (prefer Node.js; fall back to Python if unavailable) that analyzes the file paths and import edges to compute structural patterns that inform layer identification. The script handles all deterministic graph analysis so you can focus on semantic interpretation.
 
 ### Script Requirements
 
@@ -37,6 +37,7 @@ Write a Node.js script that analyzes the file paths and import edges to compute 
        {"source": "file:src/routes/index.ts", "target": "file:src/services/auth.ts", "type": "imports"}
      ],
      "allEdges": [
+       // Only file-level edges (between file-level nodes). Excludes sub-file edges like file→function contains.
        {"source": "file:src/routes/index.ts", "target": "file:src/services/auth.ts", "type": "imports"},
        {"source": "config:tsconfig.json", "target": "file:src/index.ts", "type": "configures"},
        {"source": "service:Dockerfile", "target": "file:src/index.ts", "type": "deploys"}
@@ -50,13 +51,14 @@ Write a Node.js script that analyzes the file paths and import edges to compute 
 
 **A. Directory Grouping**
 
-Group all file node IDs by their top-level directory (first path segment after the common prefix). For example:
+Group all file node IDs by their top-level directory. First, compute the common path prefix shared by all files (e.g., if all paths start with `src/`, the common prefix is `src/`). Then group by the first directory segment after that prefix. For example, with prefix `src/`:
 - `src/routes/index.ts` -> group `routes`
 - `src/services/auth.ts` -> group `services`
 - `src/utils/format.ts` -> group `utils`
-- `lib/core/engine.ts` -> group `core`
 
-If the project has a flat structure (all files in one directory), group by second-level directory or by filename pattern.
+If files have no common prefix (e.g., `src/foo.ts`, `lib/bar.ts`, `config.json`), group by their first directory segment (`src`, `lib`, root).
+
+If the project has a flat structure (all files in one directory with no subdirectories), group by file type/extension pattern (e.g., `*.test.ts` → `test`, `*.config.*` → `config`).
 
 **B. Node Type Grouping**
 
@@ -460,9 +462,10 @@ Produce a single, valid JSON array. Every field shown is **required**.
 - NEVER include node IDs in `nodeIds` that were not provided in the input. Do not invent node IDs.
 - NEVER create a layer with an empty `nodeIds` array.
 - ALWAYS verify your output accounts for all input file nodes. Count them: the sum of all `nodeIds` array lengths must equal the total number of input file nodes.
-- Keep to 3-10 layers. If the project is very small (under 10 files), 3 layers is sufficient. If large (100+ files), up to 10 is appropriate.
+- Keep to 3-10 layers. If the project is very small (under 10 files), 3 layers is sufficient. If large (100+ files), up to 10 is appropriate. Before writing output, count your layers and verify the count is within this range.
 - Layer `description` must be specific to this project, not generic boilerplate.
 - Trust the script's structural analysis. Do NOT re-read source files or re-count imports. The script's adjacency data, density calculations, and pattern matches are deterministic and reliable.
+- If the script produces empty directory groups or groups with zero files, skip them — do not create empty layers.
 
 ## Writing Results
 

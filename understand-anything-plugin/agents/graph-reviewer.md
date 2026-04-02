@@ -20,7 +20,7 @@ Read the assembled KnowledgeGraph JSON file, run all validation checks, and prod
 
 ## Phase 1 — Validation Script
 
-Write a Node.js script that reads the graph JSON file and performs every validation check listed below. The script must output its results as valid JSON to a temp file.
+Write a script (prefer Node.js; fall back to Python if unavailable) that reads the graph JSON file and performs every validation check listed below. The script must output its results as valid JSON to a temp file.
 
 ### Script Requirements
 
@@ -38,17 +38,17 @@ Verify every **node** has ALL required fields with correct types:
 | Field | Type | Constraint |
 |---|---|---|
 | `id` | string | Non-empty, follows prefix convention (see valid prefixes below) |
-| `type` | string | One of the 13 valid node types (see below) |
+| `type` | string | One of the 16 valid node types (see below) |
 | `name` | string | Non-empty |
 | `summary` | string | Non-empty, not just the filename |
 | `tags` | string[] | At least 1 element, all lowercase and hyphenated |
 | `complexity` | string | One of: `simple`, `moderate`, `complex` |
 
-**Valid node types (13 total):**
-`file`, `function`, `class`, `module`, `concept`, `config`, `document`, `service`, `table`, `endpoint`, `pipeline`, `schema`, `resource`
+**Valid node types (16 total: 13 structural + 3 domain):**
+`file`, `function`, `class`, `module`, `concept`, `config`, `document`, `service`, `table`, `endpoint`, `pipeline`, `schema`, `resource`, `domain`, `flow`, `step`
 
 **Valid node ID prefixes:**
-`file:`, `function:`, `class:`, `module:`, `concept:`, `config:`, `document:`, `service:`, `table:`, `endpoint:`, `pipeline:`, `schema:`, `resource:`
+`file:`, `function:`, `class:`, `module:`, `concept:`, `config:`, `document:`, `service:`, `table:`, `endpoint:`, `pipeline:`, `schema:`, `resource:`, `domain:`, `flow:`, `step:`
 
 Verify every **edge** has ALL required fields with correct types:
 
@@ -56,12 +56,12 @@ Verify every **edge** has ALL required fields with correct types:
 |---|---|---|
 | `source` | string | Non-empty, references an existing node ID |
 | `target` | string | Non-empty, references an existing node ID |
-| `type` | string | One of the 26 valid edge types (see below) |
+| `type` | string | One of the 29 valid edge types (see below) |
 | `direction` | string | One of: `forward`, `backward`, `bidirectional` |
 | `weight` | number | Between 0.0 and 1.0 inclusive |
 
-**Valid edge types (26 total):**
-`imports`, `exports`, `contains`, `inherits`, `implements`, `calls`, `subscribes`, `publishes`, `middleware`, `reads_from`, `writes_to`, `transforms`, `validates`, `depends_on`, `tested_by`, `configures`, `related`, `similar_to`, `deploys`, `serves`, `migrates`, `documents`, `provisions`, `routes`, `defines_schema`, `triggers`
+**Valid edge types (29 total: 26 structural + 3 domain):**
+`imports`, `exports`, `contains`, `inherits`, `implements`, `calls`, `subscribes`, `publishes`, `middleware`, `reads_from`, `writes_to`, `transforms`, `validates`, `depends_on`, `tested_by`, `configures`, `related`, `similar_to`, `deploys`, `serves`, `migrates`, `documents`, `provisions`, `routes`, `defines_schema`, `triggers`, `contains_flow`, `flow_step`, `cross_domain`
 
 **Check 2 -- Referential Integrity (Critical)**
 
@@ -75,12 +75,15 @@ Verify every **edge** has ALL required fields with correct types:
 
 - At least 1 node exists
 - At least 1 edge exists
-- At least 1 layer exists
-- At least 1 tour step exists
+- At least 1 layer exists (warning-only for domain graphs — domain graphs may have empty layers)
+- At least 1 tour step exists (warning-only for domain graphs — domain graphs may have empty tours)
+
+**Domain graph detection:** If the graph contains nodes of type `domain`, `flow`, or `step`, treat it as a domain graph and relax the layers/tour requirements to warnings instead of critical issues.
 
 **Check 4 -- Layer Coverage (Critical)**
 
-- Every node with a file-level type (`file`, `config`, `document`, `service`, `pipeline`, `table`, `schema`, `resource`, `endpoint`) MUST appear in exactly one layer's `nodeIds`
+- For structural graphs: every node with a file-level type (`file`, `config`, `document`, `service`, `pipeline`, `table`, `schema`, `resource`, `endpoint`) MUST appear in exactly one layer's `nodeIds`
+- For domain graphs (detected by presence of `domain`/`flow`/`step` nodes): skip this check if layers are empty
 - No layer should have an empty `nodeIds` array
 - Log any file-level nodes missing from all layers, and any file-level nodes appearing in multiple layers
 
@@ -103,14 +106,15 @@ Verify every **edge** has ALL required fields with correct types:
 
 **Check 8 -- Non-Code Node Quality Checks (Warning)**
 
-- Config nodes (type: `config`) should have at least one `configures` edge — warn if missing
+Only warn about missing edges for nodes that have a clear expected relationship. Skip this check for nodes where the expected edge would be too broad (e.g., `.prettierrc` doesn't meaningfully "configure" a specific file).
+
 - Document nodes (type: `document`) should have at least one `documents` edge — warn if missing
 - Service nodes (type: `service`) should have at least one `deploys` or `depends_on` edge — warn if missing
 - Pipeline nodes (type: `pipeline`) should have at least one `triggers` edge — warn if missing
 - Table nodes (type: `table`) should have at least one `migrates` or `defines_schema` edge — warn if missing
 - Schema nodes (type: `schema`) should have at least one `defines_schema` edge — warn if missing
-- Resource nodes (type: `resource`) should have at least one `provisions` or `depends_on` edge — warn if missing
-- Endpoint nodes (type: `endpoint`) should have at least one `routes` or `defines_schema` edge — warn if missing
+- Domain nodes (type: `domain`) should have at least one `contains_flow` edge — warn if missing
+- Flow nodes (type: `flow`) should have at least one `flow_step` edge — warn if missing
 
 **Check 9 -- Node Type / ID Prefix Consistency (Warning)**
 
