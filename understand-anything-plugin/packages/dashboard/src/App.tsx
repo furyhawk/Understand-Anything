@@ -279,6 +279,8 @@ function Dashboard({ accessToken }: { accessToken: string }) {
         const result = validateGraph(data);
         if (result.success && result.data) {
           setDomainGraph(result.data);
+        } else if (result.fatal) {
+          console.warn(`[domain-graph] validation failed: ${result.fatal}`);
         }
       })
       .catch(() => {
@@ -315,7 +317,9 @@ function Dashboard({ accessToken }: { accessToken: string }) {
               <div className="w-px h-5 bg-border-subtle" />
               <div className="flex items-center bg-elevated rounded-lg p-0.5">
                 <button
+                  type="button"
                   onClick={() => setViewMode("domain")}
+                  title="Switch to domain view"
                   className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
                     viewMode === "domain"
                       ? "bg-accent/20 text-accent"
@@ -325,7 +329,9 @@ function Dashboard({ accessToken }: { accessToken: string }) {
                   Domain
                 </button>
                 <button
+                  type="button"
                   onClick={() => setViewMode("structural")}
+                  title="Switch to structural view"
                   className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
                     viewMode === "structural"
                       ? "bg-accent/20 text-accent"
