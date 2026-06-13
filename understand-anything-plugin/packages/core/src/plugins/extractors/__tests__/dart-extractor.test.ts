@@ -74,4 +74,78 @@ describe("DartExtractor", () => {
       parser.delete();
     });
   });
+
+  describe("extractStructure - classes", () => {
+    it("extracts a class with fields and methods", () => {
+      const { tree, parser, root } = parse(`class Counter {
+  int count = 0;
+  String? label;
+  void increment() { count++; }
+  int get value => count;
+}
+`);
+      const result = extractor.extractStructure(root);
+
+      expect(result.classes).toHaveLength(1);
+      expect(result.classes[0].name).toBe("Counter");
+      expect(result.classes[0].methods).toContain("increment");
+      // method declarations land in functions[] too (matching Kotlin convention)
+      expect(result.functions.map((f) => f.name)).toContain("increment");
+      // Field extraction: `int count = 0;` and `String? label;` both parse as
+      // declaration > initialized_identifier_list > initialized_identifier > identifier
+      expect(result.classes[0].properties).toEqual(
+        expect.arrayContaining(["count", "label"]),
+      );
+      // Getters appear as `method_signature > getter_signature`, a separate node
+      // type from `function_signature` — not yet surfaced (documented limitation).
+      expect(result.classes[0].methods).not.toContain("value");
+
+      tree.delete();
+      parser.delete();
+    });
+
+    it("extracts an empty class", () => {
+      const { tree, parser, root } = parse(`class Empty {}\n`);
+      const result = extractor.extractStructure(root);
+
+      expect(result.classes).toHaveLength(1);
+      expect(result.classes[0].name).toBe("Empty");
+      expect(result.classes[0].methods).toEqual([]);
+
+      tree.delete();
+      parser.delete();
+    });
+
+    it("extracts an abstract class with method requirements", () => {
+      const { tree, parser, root } = parse(`abstract class Shape {
+  double area();
+}
+`);
+      const result = extractor.extractStructure(root);
+
+      expect(result.classes).toHaveLength(1);
+      expect(result.classes[0].name).toBe("Shape");
+      expect(result.classes[0].methods).toContain("area");
+
+      tree.delete();
+      parser.delete();
+    });
+
+    it("extracts a class with extends + with + implements clauses", () => {
+      const { tree, parser, root } = parse(`class Square extends Shape with Comparable<Square> implements Cloneable {
+  double side;
+  Square(this.side);
+  double area() => side * side;
+}
+`);
+      const result = extractor.extractStructure(root);
+
+      expect(result.classes).toHaveLength(1);
+      expect(result.classes[0].name).toBe("Square");
+      expect(result.classes[0].methods).toContain("area");
+
+      tree.delete();
+      parser.delete();
+    });
+  });
 });

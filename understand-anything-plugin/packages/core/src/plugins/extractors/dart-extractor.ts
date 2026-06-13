@@ -16,10 +16,12 @@ function isExported(name: string): boolean {
 /**
  * Extract the identifier name from a `function_signature` node.
  *
- * NOTE: for `method_signature` (class-body method declarations), callers
- * must first unwrap to the inner `function_signature` child before invoking
- * this helper — the Dart grammar layers `method_signature > function_signature`
- * and `findChild(..., "identifier")` would otherwise miss the function name.
+ * NOTE: this helper expects a `function_signature` node. The Dart grammar
+ * wraps the function_signature inside two different parent shapes:
+ *   - `method_signature > function_signature` for CONCRETE class methods.
+ *   - `declaration > function_signature` for ABSTRACT class methods (no body).
+ * Callers (`collectClassBody`) unwrap to the inner `function_signature`
+ * before invoking this helper.
  */
 function extractFunctionName(sig: TreeSitterNode): string | null {
   const id = findChild(sig, "identifier");
@@ -87,6 +89,83 @@ function extractReturnType(sig: TreeSitterNode): string | undefined {
 }
 
 /**
+ * Push a method/function entry. Used by `collectClassBody` for both
+ * `method_signature` and `declaration > function_signature` shapes so a
+ * future change to the entry's fields lands in one place.
+ */
+function pushMethod(
+  declNode: TreeSitterNode,
+  sig: TreeSitterNode,
+  name: string,
+  methods: string[],
+  functions: StructuralAnalysis["functions"],
+  exports: StructuralAnalysis["exports"],
+): void {
+  methods.push(name);
+  functions.push({
+    name,
+    lineRange: [declNode.startPosition.row + 1, declNode.endPosition.row + 1],
+    params: extractParams(sig),
+    returnType: extractReturnType(sig),
+  });
+  if (isExported(name)) {
+    exports.push({ name, lineNumber: declNode.startPosition.row + 1 });
+  }
+}
+
+/**
+ * Walk a `class_body` (or `extension_body` / `enum_body`) and collect
+ * `method_signature` declarations into the class's `methods` array AND the
+ * top-level `functions` array, mirroring KotlinExtractor.collectClassBody.
+ *
+ * Field extraction: `int count = 0;` and `String? label;` inside a class body
+ * both parse as `declaration > initialized_identifier_list > initialized_identifier
+ * > identifier`. The nullable `?` is an unnamed sibling of `type_identifier`,
+ * so it does not affect this path.
+ */
+function collectClassBody(
+  body: TreeSitterNode,
+  methods: string[],
+  properties: string[],
+  functions: StructuralAnalysis["functions"],
+  exports: StructuralAnalysis["exports"],
+): void {
+  for (let i = 0; i < body.childCount; i++) {
+    const member = body.child(i);
+    if (!member) continue;
+
+    if (member.type === "method_signature") {
+      // Concrete method: `method_signature > function_signature`.
+      // NOTE: `getter_signature` also nests under `method_signature` but is a
+      // separate node type — getters are not yet surfaced (documented limitation).
+      const inner = findChild(member, "function_signature");
+      if (!inner) continue;
+      const name = extractFunctionName(inner);
+      if (!name) continue;
+      pushMethod(member, inner, name, methods, functions, exports);
+    } else if (member.type === "declaration") {
+      // Abstract method declarations (e.g. `double area();`) appear as
+      // `declaration > function_signature` — not wrapped in `method_signature`.
+      const fnSig = findChild(member, "function_signature");
+      if (fnSig) {
+        const name = extractFunctionName(fnSig);
+        if (name) {
+          pushMethod(member, fnSig, name, methods, functions, exports);
+        }
+        continue;
+      }
+      // Field declaration — surface initialized_identifier names as properties.
+      const list = findChild(member, "initialized_identifier_list");
+      if (!list) continue;
+      for (const init of findChildren(list, "initialized_identifier")) {
+        const id = findChild(init, "identifier");
+        if (id) properties.push(id.text);
+      }
+    }
+  }
+}
+
+/**
  * Dart extractor for tree-sitter structural analysis + call graph.
  *
  * Approach (matching `KotlinExtractor` convention): mixin / extension / enum
@@ -112,6 +191,9 @@ export class DartExtractor implements LanguageExtractor {
         case "function_signature":
           this.extractTopLevelFunction(node, functions, exports);
           break;
+        case "class_definition":
+          this.extractClassDefinition(node, classes, functions, exports);
+          break;
       }
     }
 
@@ -135,6 +217,36 @@ export class DartExtractor implements LanguageExtractor {
     });
     if (isExported(name)) {
       exports.push({ name, lineNumber: sig.startPosition.row + 1 });
+    }
+  }
+
+  private extractClassDefinition(
+    declNode: TreeSitterNode,
+    classes: StructuralAnalysis["classes"],
+    functions: StructuralAnalysis["functions"],
+    exports: StructuralAnalysis["exports"],
+  ): void {
+    const nameNode = findChild(declNode, "identifier");
+    if (!nameNode) return;
+    const name = nameNode.text;
+
+    const methods: string[] = [];
+    const properties: string[] = [];
+
+    const body = findChild(declNode, "class_body");
+    if (body) {
+      collectClassBody(body, methods, properties, functions, exports);
+    }
+
+    classes.push({
+      name,
+      lineRange: [declNode.startPosition.row + 1, declNode.endPosition.row + 1],
+      methods,
+      properties,
+    });
+
+    if (isExported(name)) {
+      exports.push({ name, lineNumber: declNode.startPosition.row + 1 });
     }
   }
 
